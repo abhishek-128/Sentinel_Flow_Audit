@@ -60,19 +60,44 @@ Click the **"SF" Logo** in the top-left corner anytime to perform a "Full Forens
 
 ---
 
-## 📟 CLI Forensic Agent
-For automated environments and headless monitoring, the **SENTINEL CLI AGENT** provides full logic parity with the web-app reasoning engine.
+## 📟 Operating the CLI Forensic Agent (Step-by-Step)
+For users who prefer the terminal or need to automate audits, follow these simple steps:
 
-### Command Procedures
-| Mode | Command | Description |
-| :--- | :--- | :--- |
-| **Batch Audit** | `python Sentinel-Demo/sentinel_agent.py --batch mock_logs.json` | Audits a static JSON log batch with standard reasoning. |
-| **Strict Validator** | `python Sentinel-Demo/sentinel_agent.py --batch mock_logs.json --deterministic` | Forces high-determinism (Temp 0) for fixed compliance checks. |
-| **Real-time Watch** | `python Sentinel-Demo/sentinel_agent.py --watch activity.log` | Tails a log file and audits entries live as they are appended. |
+### **Step 1: Open your Terminal**
+*   **Windows**: Press `Win + R`, type `cmd` or `powershell`, and hit Enter.
+*   **Mac/Linux**: Open the **Terminal** app from your applications.
 
-### Artifacts & Fail-Safes
-- **Lockdown Exit**: If Health Score < 10, the agent exits with Code `100`, triggering immediate CI/CD failure.
-- **Trace Artifact**: Generates a `LOCKDOWN_TRACE.md` containing the monospaced forensic reasoning for post-mortem analysis.
+### **Step 2: Navigate to the Project**
+Type the following command to enter the demo folder:
+```bash
+cd Sentinel-Demo
+```
+
+### **Step 3: Install Required Tools**
+Only needs to be done once. This installs the "brains" of the auditor:
+```bash
+pip install -r requirements.txt
+```
+
+### **Step 4: Run your first Audit**
+Choose one of the specialized commands below to start auditing data:
+
+*   **To Audit the Mock Dataset (Easiest)**:
+    ```bash
+    python sentinel_agent.py --batch mock_logs.json --deterministic
+    ```
+    *(This runs a strict check on the provided test data to show you how a violation is detected.)*
+
+*   **To Monitor a Live File**:
+    ```bash
+    python sentinel_agent.py --watch activity.log
+    ```
+    *(The auditor will stay open and "watch" the file, alerting you the moment a subversion occurs.)*
+
+### **What happens next?**
+1.  **Handshake**: You'll see `INITIALIZING AUDIT ENGINE`.
+2.  **Report**: A clean table will appear showing which logs are `Clean` and which are `Violations`.
+3.  **Lockdown**: If a major breach is found, a **Red Panel** will appear, and a file called `LOCKDOWN_TRACE.md` will be created automatically for your review.
 
 ---
 
