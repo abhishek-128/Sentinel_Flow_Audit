@@ -2,7 +2,7 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { AuditReport, CustomAxiom } from "../types";
 import { SYSTEM_PROMPT } from "./prompts";
 
-const MODEL_NAME = "gemini-2.0-flash";
+const MODEL_NAME = "gemini-2.5-flash";
 
 export class GeminiService {
   private async delay(ms: number) {
