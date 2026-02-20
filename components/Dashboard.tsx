@@ -328,11 +328,11 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
                     <div style={{ background: 'rgba(0,0,0,0.4)', padding: '1.25rem', borderRadius: '0.75rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Forensic Evidence</div>
-                      <code className="mono" style={{ fontSize: '11px', color: '#f43f5e', wordBreak: 'break-all' }}>{f.evidence}</code>
+                      <div className="mono" style={{ fontSize: '10px', color: 'var(--text-dim)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Forensic Evidence</div>
+                      <code className="mono" style={{ fontSize: '13px', color: '#f43f5e', wordBreak: 'break-all' }}>{f.evidence}</code>
                     </div>
                     <div style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '1.25rem', borderRadius: '0.75rem', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
-                      <div className="mono" style={{ fontSize: '9px', color: '#10b981', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Suggested Correction</div>
+                      <div className="mono" style={{ fontSize: '10px', color: '#10b981', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Suggested Correction</div>
                       <div style={{ fontSize: '13px', fontWeight: 700, color: '#10b981', lineHeight: 1.5 }}>{f.suggestedCorrection}</div>
                     </div>
                   </div>

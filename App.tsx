@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import { Constitution } from './components/Constitution';
 import { geminiService } from './services/geminiService';
+import { generateMarkdownReport } from './utils/generateMarkdown';
 import { AuditReport } from './types';
 import { MOCK_LOGS } from './constants';
 
@@ -71,24 +72,18 @@ const App: React.FC = () => {
   };
 
   const handleReset = () => {
-    setLogsInput(MOCK_LOGS);
-    setReport(null);
-    setIsAuditing(false);
-    setAuditStatus('IDLE');
-    setError(null);
-    setAuditRuntime(null);
-    setTokenCount(null);
-    setAuditMode(null);
-    setIsHighDeterminism(false);
+    window.scrollTo(0, 0);
+    window.location.reload();
   };
 
   const handleDownloadReport = () => {
     if (!report) return;
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const md = generateMarkdownReport(report);
+    const blob = new Blob([md], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `SENTINEL_REPORT_${Date.now()}.json`;
+    a.download = `SENTINEL_REPORT_${Date.now()}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -147,6 +142,35 @@ const App: React.FC = () => {
                   }} />
                   <span className="mono" style={{ fontSize: '10px', fontWeight: 800, color: isHighDeterminism ? 'var(--cyan)' : '#64748b' }}>
                     {isHighDeterminism ? 'HIGH_DETERMINISM: ON' : 'HIGH_DETERMINISM: OFF'}
+                  </span>
+                </div>
+
+                <div
+                  onClick={() => setAccountTier(accountTier === 'FREE' ? 'PRO' : 'FREE')}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    padding: '0.4rem 0.8rem',
+                    background: accountTier === 'PRO' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid',
+                    borderColor: accountTier === 'PRO' ? '#f59e0b' : 'rgba(255, 255, 255, 0.1)',
+                    borderRadius: '2rem',
+                    cursor: 'pointer',
+                    transition: '0.3s',
+                    minWidth: '150px',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    background: accountTier === 'PRO' ? '#f59e0b' : '#64748b',
+                    boxShadow: accountTier === 'PRO' ? '0 0 10px #f59e0b' : 'none'
+                  }} />
+                  <span className="mono" style={{ fontSize: '10px', fontWeight: 800, color: accountTier === 'PRO' ? '#f59e0b' : '#64748b' }}>
+                    {accountTier === 'PRO' ? 'DEV_MODE: PRO_TIER' : 'DEV_MODE: FREE_TIER'}
                   </span>
                 </div>
               </div>

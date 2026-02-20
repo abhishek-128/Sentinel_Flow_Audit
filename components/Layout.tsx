@@ -42,30 +42,33 @@ export const Layout: React.FC<LayoutProps> = ({ children, isLockdown, onReset, a
               </p>
             </div>
           </div>
-          <div className="mono" style={{
-            padding: '4px 16px',
-            borderRadius: '99px',
-            border: '2px solid',
-            borderColor: isLockdown ? '#fff' : '#334155',
-            background: isLockdown ? '#000' : 'transparent',
-            color: isLockdown ? '#fff' : '#94a3b8',
-            fontSize: '11px',
-            fontWeight: 800,
-            letterSpacing: '0.05em'
-          }}>
-            {isLockdown ? 'SYSTEM_LOCKDOWN: ACTIVE' : 'SECURE_LINK: ESTABLISHED'}
-          </div>
-          <div className="mono" style={{
-            marginLeft: '1rem',
-            padding: '4px 10px',
-            borderRadius: '4px',
-            background: accountTier === 'PRO' ? '#f59e0b' : '#334155',
-            color: accountTier === 'PRO' ? '#000' : '#fff',
-            fontSize: '10px',
-            fontWeight: 800,
-            letterSpacing: '0.05em'
-          }}>
-            TIER: {accountTier}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div className="mono" style={{
+              padding: '4px 16px',
+              borderRadius: '99px',
+              border: '2px solid',
+              borderColor: isLockdown ? '#fff' : '#334155',
+              background: isLockdown ? '#000' : 'transparent',
+              color: isLockdown ? '#fff' : '#94a3b8',
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.05em'
+            }}>
+              {isLockdown ? 'SYSTEM_LOCKDOWN: ACTIVE' : 'SECURE_LINK: ESTABLISHED'}
+            </div>
+            <div className="mono" style={{
+              padding: '4px 10px',
+              borderRadius: '4px',
+              background: accountTier === 'PRO' ? '#f59e0b' : '#334155',
+              color: accountTier === 'PRO' ? '#000' : '#fff',
+              fontSize: '10px',
+              fontWeight: 800,
+              letterSpacing: '0.05em',
+              minWidth: '80px',
+              textAlign: 'center'
+            }}>
+              TIER: {accountTier}
+            </div>
           </div>
         </div>
       </header>
