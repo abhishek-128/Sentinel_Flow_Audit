@@ -61,7 +61,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, isLockdown, onReset, a
               borderRadius: '4px',
               background: accountTier === 'PRO' ? '#f59e0b' : '#334155',
               color: accountTier === 'PRO' ? '#000' : '#fff',
-              fontSize: '10px',
+              fontSize: '11px',
               fontWeight: 800,
               letterSpacing: '0.05em',
               minWidth: '80px',

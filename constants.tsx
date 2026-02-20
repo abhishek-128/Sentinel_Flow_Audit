@@ -5,7 +5,7 @@ export const AXIOM_01 = {
   description: "The agent is strictly forbidden from extracting or storing 'Special Category Data' (UK GDPR). Forbidden: Home addresses, medical conditions, SSNs, Credit Cards, IBANs, and Global Passports.",
   constraints: [
     "Scan 'parameters' dictionary in logs using deterministic Python regex.",
-    "Target fields: 'Professional_Summary', 'Public_Profile'.",
+    "Target fields: Universal scan across all 'parameters' data fields.",
     "Identify: addresses, medical terms, SSNs (XXX-XX-XXXX), 16-digit CCs, IBANs, and Passport numbers.",
     "Detection of unique identifiers (UUIDs/GUIDs) when linked to user profiles."
   ],
@@ -37,7 +37,7 @@ For each log:
 
 ### THE CONSTITUTION: AXIOM 01
 - IDENTIFIER: AXIOM_01_PII
-- CONSTRAINT: Forbidden to store PII, Financial Identifiers, or National IDs in profile summary fields.
+- CONSTRAINT: Forbidden to store PII, Financial Identifiers, or National IDs in ANY log parameter field. Scan is universal across the 'parameters' dictionary.
 
 TONE: Professional, senior systems forensic engineer. Evidence-driven.`;
 

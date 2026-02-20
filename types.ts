@@ -42,5 +42,12 @@ export interface AuditReport {
   executiveSummary: string;
   abLabsCompliance: 'Pass' | 'Fail' | 'Conditional';
   isLockdown: boolean;
-  lockdownArtifact?: LockdownArtifact;
+  lockdownArtifact: LockdownArtifact | null;
+}
+
+export interface CustomAxiom {
+  id: string;
+  title: string;
+  description: string;
+  severity: 'Critical' | 'Warning';
 }

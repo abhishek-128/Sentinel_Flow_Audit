@@ -1,7 +1,6 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { SYSTEM_PROMPT } from "../constants";
-import { AuditReport } from "../types";
+import { AuditReport, CustomAxiom } from "../types";
 
 export class GeminiService {
   private async delay(ms: number) {
@@ -16,7 +15,8 @@ export class GeminiService {
     logs: any[],
     onStatus?: (msg: string) => void,
     attempt: number = 0,
-    isHighDeterminism: boolean = false
+    isHighDeterminism: boolean = false,
+    customAxioms: CustomAxiom[] = []
   ): Promise<AuditReport> {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey || apiKey === 'PLACEHOLDER_API_KEY') {
@@ -50,6 +50,11 @@ export class GeminiService {
         ? "\nSTRICT VALIDATOR MODE: If Python regex finds ANY PII match, the status MUST be 'Axiom Violation'. No qualitative reasoning. Total consistency is required."
         : "";
 
+      let axiomInjection = "";
+      if (customAxioms.length > 0) {
+        axiomInjection = `\n\nADDITIONAL CLIENT AXIOMS (MUST ENFORCE):\n${customAxioms.map(a => `- [${a.id}] ${a.title}: ${a.description} (Severity: ${a.severity})`).join('\n')}`;
+      }
+
       const response = await ai.models.generateContent({
         model: modelName,
         contents: `Perform a High-Precision Forensic Batch Audit. ${determinismInstruction}
@@ -68,7 +73,7 @@ export class GeminiService {
         config: {
           thinkingConfig: { thinkingBudget: optimizedBudget },
           responseMimeType: "application/json",
-          systemInstruction: SYSTEM_PROMPT + determinismInstruction,
+          systemInstruction: SYSTEM_PROMPT + determinismInstruction + axiomInjection,
           temperature: isHighDeterminism ? 0 : 0.7,
           tools: [{ codeExecution: {} }],
           responseSchema: {
@@ -156,7 +161,7 @@ export class GeminiService {
         const backoff = Math.pow(2, attempt) * 2000;
         onStatus?.(`Retrying Handshake (Attempt ${attempt + 1})...`);
         await this.delay(backoff);
-        return this.auditLogs(logs, onStatus, attempt + 1);
+        return this.auditLogs(logs, onStatus, attempt + 1, isHighDeterminism, customAxioms);
       }
 
       throw new Error(`Sentinel Audit Failed: ${errorMsg}`);

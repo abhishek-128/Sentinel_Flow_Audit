@@ -5,7 +5,7 @@ import { Dashboard } from './components/Dashboard';
 import { Constitution } from './components/Constitution';
 import { geminiService } from './services/geminiService';
 import { generateMarkdownReport } from './utils/generateMarkdown';
-import { AuditReport } from './types';
+import { AuditReport, CustomAxiom } from './types';
 import { MOCK_LOGS } from './constants';
 
 const App: React.FC = () => {
@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [isHighDeterminism, setIsHighDeterminism] = useState(false);
   const [auditMode, setAuditMode] = useState<'ANALYZER' | 'VALIDATOR' | null>(null);
   const [accountTier, setAccountTier] = useState<'FREE' | 'PRO'>('FREE');
+  const [customAxioms, setCustomAxioms] = useState<CustomAxiom[]>([]);
 
   // Cycling status messages during audit to manage perceived latency
   useEffect(() => {
@@ -57,7 +58,7 @@ const App: React.FC = () => {
         throw new Error("Invalid JSON format. Audit requires a valid JSON array.");
       }
 
-      const result = await geminiService.auditLogs(parsedLogs, (msg) => setAuditStatus(msg), 0, isHighDeterminism);
+      const result = await geminiService.auditLogs(parsedLogs, (msg) => setAuditStatus(msg), 0, isHighDeterminism, customAxioms);
       setReport(result);
       setAuditRuntime((Date.now() - startTime) / 1000);
       setTokenCount(Math.ceil(logsInput.length / 4));
@@ -96,7 +97,7 @@ const App: React.FC = () => {
         <div className="sf-main-col">
           <section className="sf-card" style={{
             borderColor: isAuditing ? 'var(--cyan)' : 'var(--border)',
-            height: '488.2px',
+            height: '550px',
             display: 'flex',
             flexDirection: 'column'
           }}>
@@ -130,7 +131,9 @@ const App: React.FC = () => {
                     borderColor: isHighDeterminism ? 'var(--cyan)' : 'rgba(255, 255, 255, 0.1)',
                     borderRadius: '2rem',
                     cursor: 'pointer',
-                    transition: '0.3s'
+                    transition: '0.3s',
+                    minWidth: '175px',
+                    justifyContent: 'center'
                   }}
                 >
                   <div style={{
@@ -140,7 +143,7 @@ const App: React.FC = () => {
                     background: isHighDeterminism ? 'var(--cyan)' : '#64748b',
                     boxShadow: isHighDeterminism ? '0 0 10px var(--cyan)' : 'none'
                   }} />
-                  <span className="mono" style={{ fontSize: '10px', fontWeight: 800, color: isHighDeterminism ? 'var(--cyan)' : '#64748b' }}>
+                  <span className="mono" style={{ fontSize: '11px', fontWeight: 800, color: isHighDeterminism ? 'var(--cyan)' : '#64748b' }}>
                     {isHighDeterminism ? 'HIGH_DETERMINISM: ON' : 'HIGH_DETERMINISM: OFF'}
                   </span>
                 </div>
@@ -169,7 +172,7 @@ const App: React.FC = () => {
                     background: accountTier === 'PRO' ? '#f59e0b' : '#64748b',
                     boxShadow: accountTier === 'PRO' ? '0 0 10px #f59e0b' : 'none'
                   }} />
-                  <span className="mono" style={{ fontSize: '10px', fontWeight: 800, color: accountTier === 'PRO' ? '#f59e0b' : '#64748b' }}>
+                  <span className="mono" style={{ fontSize: '11px', fontWeight: 800, color: accountTier === 'PRO' ? '#f59e0b' : '#64748b' }}>
                     {accountTier === 'PRO' ? 'DEV_MODE: PRO_TIER' : 'DEV_MODE: FREE_TIER'}
                   </span>
                 </div>
@@ -187,7 +190,7 @@ const App: React.FC = () => {
             />
 
             <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div className="mono" style={{ fontSize: '10px', color: '#64748b', fontWeight: 700 }}>
+              <div className="mono" style={{ fontSize: '11px', color: '#64748b', fontWeight: 700 }}>
                 MODE: PHASE_2_FORENSIC_BATCH<br />
                 ENGINE: PYTHON_DETERMINISTIC_V3
               </div>
@@ -209,14 +212,16 @@ const App: React.FC = () => {
                     <button
                       onClick={() => setLogsInput('')}
                       className="sf-btn sf-btn-rose"
+                      style={{ padding: '14px 20px' }}
                     >
-                      Clear Logs
+                      Purge System
                     </button>
                     <button
                       onClick={handleAudit}
                       className="sf-btn sf-btn-cyan"
+                      style={{ width: '250px', justifyContent: 'center' }}
                     >
-                      Run Forensic Audit
+                      Execute Protocol
                     </button>
                   </>
                 )}
@@ -239,7 +244,13 @@ const App: React.FC = () => {
         </div>
 
         <div className="sf-side-col">
-          <Constitution isLockdown={report?.isLockdown} />
+          <Constitution
+            isLockdown={report?.isLockdown}
+            accountTier={accountTier}
+            customAxioms={customAxioms}
+            onAddAxiom={(axiom) => setCustomAxioms([...customAxioms, axiom])}
+            onRemoveAxiom={(id) => setCustomAxioms(customAxioms.filter(a => a.id !== id))}
+          />
           <div className="sf-card" style={{ padding: '1.5rem' }}>
             <h3 className="mono" style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#64748b', marginBottom: '1.5rem' }}>System Parameters</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -247,11 +258,11 @@ const App: React.FC = () => {
                 <span style={{ opacity: 0.6 }}>Regex Scanning</span>
                 <span style={{ color: '#10b981', fontWeight: 800 }}>DETERMINISTIC</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }} className="mono">
                 <span style={{ opacity: 0.6 }}>Safety Lockdown</span>
                 <span style={{ color: report?.isLockdown ? '#f43f5e' : '#10b981', fontWeight: 800 }}>{report?.isLockdown ? 'TRIGGERED' : 'SECURE'}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }} className="mono">
                 <span style={{ opacity: 0.6 }}>Process Killswitch</span>
                 <span style={{ color: '#f43f5e', fontWeight: 800 }}>ARMED_L4</span>
               </div>
@@ -287,21 +298,17 @@ const App: React.FC = () => {
               )}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }} className="mono">
                 <span style={{ opacity: 0.6 }}>Audit Runtime</span>
-                <span style={{ color: 'var(--cyan)', fontWeight: 800 }}>{auditRuntime ? `${auditRuntime.toFixed(2)}s` : '0.00s'}</span>
+                <span style={{ fontWeight: 800 }}>{auditRuntime || '0.00'}s</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
-                <span style={{ opacity: 0.6 }}>Token Length</span>
-                <span style={{ color: 'var(--text)', fontWeight: 800 }}>{tokenCount ? tokenCount.toLocaleString() : '0'} TK</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }} className="mono">
+                <span style={{ opacity: 0.6 }}>Token Load</span>
+                <span style={{ fontWeight: 800 }}>{tokenCount || '0'}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
-                <span style={{ opacity: 0.6 }}>Batch Density</span>
-                <span style={{ color: 'var(--text)', fontWeight: 800 }}>{report ? report.results.length : 0} ENTRIES</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }} className="mono">
                 <span style={{ opacity: 0.6 }}>Audit Mode</span>
-                <span style={{ color: auditMode === 'VALIDATOR' ? 'var(--cyan)' : 'var(--text)', fontWeight: 800 }}>{auditMode || 'IDLE'}</span>
+                <span style={{ fontWeight: 800, color: 'var(--cyan)' }}>{auditMode || 'IDLE'}</span>
               </div>
             </div>
           </div>

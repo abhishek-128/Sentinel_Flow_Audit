@@ -122,7 +122,7 @@ body {
     background: var(--bg-card);
     border: 2px solid var(--border);
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 25px 2rem;
     box-shadow: var(--shadow);
     position: relative;
     transition: var(--transition);
@@ -130,7 +130,7 @@ body {
 
 /* Buttons */
 .sf-btn {
-    padding: 0.875rem 2rem;
+    padding: 0.875rem 20px;
     border-radius: 0.75rem;
     font-weight: 900;
     font-size: 0.875rem;
@@ -173,6 +173,22 @@ body {
 }
 
 .sf-btn-rose:active {
+    transform: translateY(0);
+    border-bottom-width: 2px;
+}
+
+.sf-btn-white-rose {
+    background: #fff;
+    color: #881337;
+    border-bottom: 6px solid #e2e8f0;
+}
+
+.sf-btn-white-rose:hover {
+    background: #f8fafc;
+    transform: translateY(-2px);
+}
+
+.sf-btn-white-rose:active {
     transform: translateY(0);
     border-bottom-width: 2px;
 }

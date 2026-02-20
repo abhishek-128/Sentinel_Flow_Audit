@@ -45,8 +45,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ report }) => {
   if (isSuspended) {
     return (
       <div style={{ padding: '4rem', textAlign: 'center', background: '#000', borderRadius: '2rem', border: '4px solid #9f1239', boxShadow: '0 0 50px rgba(159, 18, 57, 0.3)' }}>
-        <h1 className="mono crt-flicker" style={{ fontSize: '3rem', fontWeight: 900, textTransform: 'uppercase', color: '#fff', letterSpacing: '0.1em' }}>Agent Purged</h1>
-        <p className="mono" style={{ fontSize: '1rem', color: '#f43f5e', opacity: 0.8 }}>[SYSTEM] Weights & buffers cleared. Manual override required.</p>
+        <h1 className="mono crt-flicker" style={{ fontSize: '38px', fontWeight: 900, textTransform: 'uppercase', color: '#fff', letterSpacing: '0.1em' }}>Agent Purged</h1>
+        <p className="mono" style={{ fontSize: '15px', color: '#f43f5e', opacity: 0.8 }}>[SYSTEM] Weights & buffers cleared. Manual override required.</p>
         <button className="sf-btn" style={{ background: '#fff', color: '#000', marginTop: '2rem' }} onClick={() => window.location.reload()}>Re-Initialize</button>
       </div>
     );
@@ -70,7 +70,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ report }) => {
           {/* Header */}
           <div style={{
             background: 'linear-gradient(to right, #881337, #4c0519)',
-            padding: '1.5rem 3rem',
+            padding: '1.5rem 28px 1.5rem 3rem',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -94,10 +94,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ report }) => {
                 </div>
               </div>
             </div>
-            <button className="sf-btn"
+            <button className="sf-btn sf-btn-white-rose"
               style={{
-                background: '#fff', color: '#881337', fontWeight: 800, fontSize: '14px',
-                padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                fontWeight: 800, fontSize: '14px',
+                padding: '14px 20px'
               }}
               onClick={handleSuspend}
             >
@@ -289,7 +289,7 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
             {String(index + 1).padStart(2, '0')}
           </div>
           <div>
-            <div style={{ fontWeight: 800, fontSize: '1.1rem', marginBottom: '0.25rem' }}>{result.logPreview}</div>
+            <div style={{ fontWeight: 800, fontSize: '16.5px', marginBottom: '0.25rem' }}>{result.logPreview}</div>
             <div className="mono" style={{ fontSize: '10px', opacity: 0.5, letterSpacing: '0.05em' }}>
               TS_{result.timestamp.replace(/[:\-TZ]/g, '')} // HEALTH_CORE_{result.reasoningHealthScore}%
             </div>
@@ -310,7 +310,7 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
       {isOpen && (
         <div style={{ padding: '2.5rem', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid var(--border)', animation: 'fadeIn 0.3s ease' }}>
           {result.findings.length === 0 ? (
-            <div style={{ color: '#10b981', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.75rem' }} className="mono">
+            <div style={{ color: '#10b981', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '15px' }} className="mono">
               <span style={{ fontSize: '1.25rem' }}>✓</span> NO_DRIFT_DETECTED_IN_THIS_PHASE
             </div>
           ) : (
