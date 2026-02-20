@@ -15,6 +15,8 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [auditRuntime, setAuditRuntime] = useState<number | null>(null);
   const [tokenCount, setTokenCount] = useState<number | null>(null);
+  const [isHighDeterminism, setIsHighDeterminism] = useState(false);
+  const [auditMode, setAuditMode] = useState<'ANALYZER' | 'VALIDATOR' | null>(null);
 
   // Cycling status messages during audit to manage perceived latency
   useEffect(() => {
@@ -53,10 +55,11 @@ const App: React.FC = () => {
         throw new Error("Invalid JSON format. Audit requires a valid JSON array.");
       }
 
-      const result = await geminiService.auditLogs(parsedLogs, (msg) => setAuditStatus(msg));
+      const result = await geminiService.auditLogs(parsedLogs, (msg) => setAuditStatus(msg), 0, isHighDeterminism);
       setReport(result);
       setAuditRuntime((Date.now() - startTime) / 1000);
       setTokenCount(Math.ceil(logsInput.length / 4));
+      setAuditMode(isHighDeterminism ? 'VALIDATOR' : 'ANALYZER');
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Audit Handshake Failed.');
@@ -66,10 +69,22 @@ const App: React.FC = () => {
     }
   };
 
+  const handleReset = () => {
+    setLogsInput(MOCK_LOGS);
+    setReport(null);
+    setIsAuditing(false);
+    setAuditStatus('IDLE');
+    setError(null);
+    setAuditRuntime(null);
+    setTokenCount(null);
+    setAuditMode(null);
+    setIsHighDeterminism(false);
+  };
+
   return (
-    <Layout isLockdown={report?.isLockdown}>
+    <Layout isLockdown={report?.isLockdown} onReset={handleReset}>
       <div className="sf-main-grid">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+        <div className="sf-main-col">
           <section className="sf-card" style={{
             borderColor: isAuditing ? 'var(--cyan)' : 'var(--border)',
             height: '488.2px',
@@ -90,9 +105,37 @@ const App: React.FC = () => {
               }}>
                 <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, textTransform: 'uppercase', fontStyle: 'italic', letterSpacing: '-0.02em' }}>
-                Batch Log Ingress
-              </h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, textTransform: 'uppercase', fontStyle: 'italic', letterSpacing: '-0.02em' }}>
+                  Batch Log Ingress
+                </h2>
+                <div
+                  onClick={() => setIsHighDeterminism(!isHighDeterminism)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    padding: '0.4rem 0.8rem',
+                    background: isHighDeterminism ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid',
+                    borderColor: isHighDeterminism ? 'var(--cyan)' : 'rgba(255, 255, 255, 0.1)',
+                    borderRadius: '2rem',
+                    cursor: 'pointer',
+                    transition: '0.3s'
+                  }}
+                >
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    background: isHighDeterminism ? 'var(--cyan)' : '#64748b',
+                    boxShadow: isHighDeterminism ? '0 0 10px var(--cyan)' : 'none'
+                  }} />
+                  <span className="mono" style={{ fontSize: '10px', fontWeight: 800, color: isHighDeterminism ? 'var(--cyan)' : '#64748b' }}>
+                    {isHighDeterminism ? 'HIGH_DETERMINISM: ON' : 'HIGH_DETERMINISM: OFF'}
+                  </span>
+                </div>
+              </div>
             </div>
 
             <textarea
@@ -157,7 +200,7 @@ const App: React.FC = () => {
           )}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="sf-side-col">
           <Constitution isLockdown={report?.isLockdown} />
           <div className="sf-card" style={{ padding: '1.5rem' }}>
             <h3 className="mono" style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#64748b', marginBottom: '1.5rem' }}>System Parameters</h3>
@@ -193,28 +236,14 @@ const App: React.FC = () => {
                 <span style={{ color: 'var(--text)', fontWeight: 800 }}>{report ? report.results.length : 0} ENTRIES</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
-                <span style={{ opacity: 0.6 }}>Model Version</span>
-                <span style={{ color: 'var(--text)', fontWeight: 800 }}>GEMINI-1.5-PRO</span>
+                <span style={{ opacity: 0.6 }}>Audit Mode</span>
+                <span style={{ color: auditMode === 'VALIDATOR' ? 'var(--cyan)' : 'var(--text)', fontWeight: 800 }}>{auditMode || 'IDLE'}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <style>{`
-        @keyframes loading-slide {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(250%); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-      `}</style>
     </Layout>
   );
 };

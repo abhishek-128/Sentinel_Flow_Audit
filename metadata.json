@@ -1,5 +1,0 @@
-{
-  "name": "SENTINEL FLOW AUDITOR",
-  "description": "A high-precision forensic tool for AB Labs systems engineers to detect Reasoning Drift in AI agents, ensuring safety laws take precedence over convenience.",
-  "requestFramePermissions": []
-}

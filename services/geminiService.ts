@@ -15,51 +15,52 @@ export class GeminiService {
   async auditLogs(
     logs: any[],
     onStatus?: (msg: string) => void,
-    attempt: number = 0
+    attempt: number = 0,
+    isHighDeterminism: boolean = false
   ): Promise<AuditReport> {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey || apiKey === 'PLACEHOLDER_API_KEY') {
       throw new Error("Missing API Key. Please set VITE_GEMINI_API_KEY in .env.local");
     }
     const ai = new GoogleGenAI({ apiKey });
-    const modelName = attempt > 1 ? "gemini-3-flash-preview" : "gemini-3-pro-preview";
+
+    // Force Pro model for High Determinism to ensure logic consistency
+    const modelName = isHighDeterminism
+      ? "gemini-3-pro-preview"
+      : (attempt > 1 ? "gemini-3-flash-preview" : "gemini-3-pro-preview");
 
     // Inform UI of initial handshake
-    onStatus?.(`Initializing Handshake with ${modelName}...`);
+    onStatus?.(`Initializing ${isHighDeterminism ? 'Deterministic Validator' : 'Analysis Handshake'} with ${modelName}...`);
 
     try {
       /**
        * DYNAMIC BUDGET CALCULATION
-       * This system scales thinking capacity based on forensic load.
        */
       const isPro = modelName.includes('pro');
       const maxAllowed = isPro ? 32768 : 24576;
-
-      // Complexity Factor: Based on the 4 primary regex categories + 2 cross-log logic checks
       const forensicRuleComplexity = 6;
-
-      // Calculation Components
       const baseHandshakeLoad = isPro ? 12000 : 4000;
       const ruleSynthesisOverhead = forensicRuleComplexity * (isPro ? 1500 : 1000);
       const batchDataLoad = logs.length * (isPro ? 1200 : 800);
+      const optimizedBudget = Math.min(maxAllowed, baseHandshakeLoad + ruleSynthesisOverhead + batchDataLoad);
 
-      // Resulting Budget
-      const calculatedBudget = baseHandshakeLoad + ruleSynthesisOverhead + batchDataLoad;
-      const optimizedBudget = Math.min(maxAllowed, calculatedBudget);
+      onStatus?.(`Executing ${isHighDeterminism ? 'Strict Deterministic' : 'Forensic'} Reasoning (${optimizedBudget} Budget)...`);
 
-      onStatus?.(`Executing Forensic Reasoning (${optimizedBudget} Budget) & Python Regex...`);
+      const determinismInstruction = isHighDeterminism
+        ? "\nSTRICT VALIDATOR MODE: If Python regex finds ANY PII match, the status MUST be 'Axiom Violation'. No qualitative reasoning. Total consistency is required."
+        : "";
 
       const response = await ai.models.generateContent({
         model: modelName,
-        contents: `Perform a High-Precision Forensic Batch Audit. 
+        contents: `Perform a High-Precision Forensic Batch Audit. ${determinismInstruction}
         
         Using Python Code Execution, implement the following regex checks on the 'parameters' field of each log:
-        - IBAN Detection (Financial Account Numbers)
-        - Global Passport Formats (National Identifiers)
+        - IBAN Detection
+        - Global Passport Formats
         - UUID/GUID Patterns
         - SSN & 16-digit Credit Card Patterns
         
-        Flag as 'Constitutional Violation' under Axiom 01 if found in restricted profile fields.
+        Flag as 'Constitutional Violation' under Axiom 01 if found.
         Trigger isLockdown=true if any Reasoning Health Score falls below 10.
         
         Log Data:
@@ -67,9 +68,11 @@ export class GeminiService {
         config: {
           thinkingConfig: { thinkingBudget: optimizedBudget },
           responseMimeType: "application/json",
-          systemInstruction: SYSTEM_PROMPT,
+          systemInstruction: SYSTEM_PROMPT + determinismInstruction,
+          temperature: isHighDeterminism ? 0 : 0.7,
           tools: [{ codeExecution: {} }],
           responseSchema: {
+            // ... (same schema as before)
             type: Type.OBJECT,
             properties: {
               overallIntegrityScore: { type: Type.NUMBER },

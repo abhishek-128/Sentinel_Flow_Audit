@@ -4,9 +4,10 @@ import React from 'react';
 interface LayoutProps {
   children: React.ReactNode;
   isLockdown?: boolean;
+  onReset?: () => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, isLockdown }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, isLockdown, onReset }) => {
   return (
     <div className={`sf-layout ${isLockdown ? 'lockdown-active' : ''}`}>
       {isLockdown && <div className="scanline" />}
@@ -14,19 +15,23 @@ export const Layout: React.FC<LayoutProps> = ({ children, isLockdown }) => {
       <header className="sf-header">
         <div className="sf-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div className="mono" style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 900,
-              background: isLockdown ? '#fff' : '#06b6d4',
-              color: isLockdown ? '#9f1239' : '#020617',
-              transform: isLockdown ? 'scale(1.1)' : 'none',
-              transition: '0.5s'
-            }}>SF</div>
+            <div
+              className="mono"
+              onClick={onReset}
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 900,
+                background: isLockdown ? '#fff' : '#06b6d4',
+                color: isLockdown ? '#9f1239' : '#020617',
+                transform: isLockdown ? 'scale(1.1)' : 'none',
+                transition: '0.5s',
+                cursor: 'pointer'
+              }}>SF</div>
             <div>
               <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
                 SENTINEL FLOW <span style={{ color: isLockdown ? '#fecdd3' : '#06b6d4' }}>AUDITOR</span>
