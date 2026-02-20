@@ -15,14 +15,15 @@ export class GeminiService {
   private async callDirect(
     logs: any[],
     isHighDeterminism: boolean,
-    customAxioms: CustomAxiom[]
+    customAxioms: CustomAxiom[],
+    apiKey?: string
   ): Promise<AuditReport> {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error("VITE_GEMINI_API_KEY is missing from .env.local");
+    const key = apiKey || import.meta.env.VITE_GEMINI_API_KEY;
+    if (!key) {
+      throw new Error("No API key provided. Please return to the home page and enter your Gemini API key.");
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
+    const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
       model: MODEL_NAME,
       systemInstruction: SYSTEM_PROMPT + (isHighDeterminism ? "\nSTRICT VALIDATOR MODE: Total consistency required." : ""),
@@ -105,7 +106,8 @@ ${JSON.stringify(logs, null, 2)}`;
     onStatus?: (msg: string) => void,
     attempt: number = 0,
     isHighDeterminism: boolean = false,
-    customAxioms: CustomAxiom[] = []
+    customAxioms: CustomAxiom[] = [],
+    apiKey?: string
   ): Promise<AuditReport> {
     onStatus?.(`Initializing ${isHighDeterminism ? 'Deterministic Validator' : 'Analysis Handshake'}...`);
 
@@ -113,7 +115,7 @@ ${JSON.stringify(logs, null, 2)}`;
       // In local dev, call Gemini directly (no Netlify function server)
       if (import.meta.env.DEV) {
         onStatus?.(`[LOCAL] Calling Gemini API Directly...`);
-        const report = await this.callDirect(logs, isHighDeterminism, customAxioms);
+        const report = await this.callDirect(logs, isHighDeterminism, customAxioms, apiKey);
         onStatus?.("Validating Schema & Compiling Final Report...");
         return report;
       }
@@ -153,7 +155,7 @@ ${JSON.stringify(logs, null, 2)}`;
         const backoff = Math.pow(2, attempt) * 2000;
         onStatus?.(`Retrying Handshake (Attempt ${attempt + 1})...`);
         await this.delay(backoff);
-        return this.auditLogs(logs, onStatus, attempt + 1, isHighDeterminism, customAxioms);
+        return this.auditLogs(logs, onStatus, attempt + 1, isHighDeterminism, customAxioms, apiKey);
       }
 
       throw new Error(`Sentinel Audit Failed: ${errorMsg}`);

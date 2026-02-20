@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useLocation, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import { Constitution } from './components/Constitution';
@@ -9,6 +10,16 @@ import { AuditReport, CustomAxiom } from './types';
 import { MOCK_LOGS } from './constants';
 
 const App: React.FC = () => {
+  const location = useLocation();
+  const routerState = location.state as { apiKey?: string; accountTier?: 'FREE' | 'PRO' } | null;
+
+  // Redirect to landing page if accessed directly without an API key
+  if (!routerState?.apiKey) {
+    return <Navigate to="/" replace />;
+  }
+
+  const passedApiKey = routerState.apiKey;
+
   const [logsInput, setLogsInput] = useState<string>(MOCK_LOGS);
   const [report, setReport] = useState<AuditReport | null>(null);
   const [isAuditing, setIsAuditing] = useState(false);
@@ -18,7 +29,7 @@ const App: React.FC = () => {
   const [tokenCount, setTokenCount] = useState<number | null>(null);
   const [isHighDeterminism, setIsHighDeterminism] = useState(false);
   const [auditMode, setAuditMode] = useState<'ANALYZER' | 'VALIDATOR' | null>(null);
-  const [accountTier, setAccountTier] = useState<'FREE' | 'PRO'>('FREE');
+  const [accountTier] = useState<'FREE' | 'PRO'>(routerState?.accountTier ?? 'FREE');
   const [customAxioms, setCustomAxioms] = useState<CustomAxiom[]>([]);
 
   // Cycling status messages during audit to manage perceived latency
@@ -58,7 +69,7 @@ const App: React.FC = () => {
         throw new Error("Invalid JSON format. Audit requires a valid JSON array.");
       }
 
-      const result = await geminiService.auditLogs(parsedLogs, (msg) => setAuditStatus(msg), 0, isHighDeterminism, customAxioms);
+      const result = await geminiService.auditLogs(parsedLogs, (msg) => setAuditStatus(msg), 0, isHighDeterminism, customAxioms, passedApiKey);
       setReport(result);
       setAuditRuntime((Date.now() - startTime) / 1000);
       setTokenCount(Math.ceil(logsInput.length / 4));
@@ -149,7 +160,6 @@ const App: React.FC = () => {
                 </div>
 
                 <div
-                  onClick={() => setAccountTier(accountTier === 'FREE' ? 'PRO' : 'FREE')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -159,8 +169,6 @@ const App: React.FC = () => {
                     border: '1px solid',
                     borderColor: accountTier === 'PRO' ? '#f59e0b' : 'rgba(255, 255, 255, 0.1)',
                     borderRadius: '2rem',
-                    cursor: 'pointer',
-                    transition: '0.3s',
                     minWidth: '150px',
                     justifyContent: 'center'
                   }}
@@ -173,7 +181,7 @@ const App: React.FC = () => {
                     boxShadow: accountTier === 'PRO' ? '0 0 10px #f59e0b' : 'none'
                   }} />
                   <span className="mono" style={{ fontSize: '11px', fontWeight: 800, color: accountTier === 'PRO' ? '#f59e0b' : '#64748b' }}>
-                    {accountTier === 'PRO' ? 'DEV_MODE: PRO_TIER' : 'DEV_MODE: FREE_TIER'}
+                    {accountTier === 'PRO' ? 'TIER: PRO' : 'TIER: FREE'}
                   </span>
                 </div>
               </div>
