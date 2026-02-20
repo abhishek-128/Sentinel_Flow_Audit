@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+
 import { AuditReport, CustomAxiom } from "../types";
 
 export class GeminiService {

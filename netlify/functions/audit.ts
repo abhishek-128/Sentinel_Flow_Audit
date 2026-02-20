@@ -88,9 +88,8 @@ export const handler = async (event: any) => {
                         }
                     },
                     required: ['overallIntegrityScore', 'reasoningHealthScore', 'totalLogsProcessed', 'executiveSummary', 'abLabsCompliance', 'isLockdown', 'results']
-                }
-            },
-            tools: [{ codeExecution: {} }] as any,
+                } as any
+            }
         });
 
         const text = result.response.text();
