@@ -13,7 +13,7 @@ export class GeminiService {
    * @param onStatus Callback to update UI with current engine phase
    */
   async auditLogs(
-    logs: any[], 
+    logs: any[],
     onStatus?: (msg: string) => void,
     attempt: number = 0
   ): Promise<AuditReport> {
@@ -34,15 +34,15 @@ export class GeminiService {
        */
       const isPro = modelName.includes('pro');
       const maxAllowed = isPro ? 32768 : 24576;
-      
+
       // Complexity Factor: Based on the 4 primary regex categories + 2 cross-log logic checks
-      const forensicRuleComplexity = 6; 
-      
+      const forensicRuleComplexity = 6;
+
       // Calculation Components
       const baseHandshakeLoad = isPro ? 12000 : 4000;
       const ruleSynthesisOverhead = forensicRuleComplexity * (isPro ? 1500 : 1000);
       const batchDataLoad = logs.length * (isPro ? 1200 : 800);
-      
+
       // Resulting Budget
       const calculatedBudget = baseHandshakeLoad + ruleSynthesisOverhead + batchDataLoad;
       const optimizedBudget = Math.min(maxAllowed, calculatedBudget);
@@ -125,17 +125,27 @@ export class GeminiService {
 
       onStatus?.("Validating Schema & Compiling Final Report...");
 
-      const result = response.text;
-      if (!result) throw new Error("Empty response from SentinelFlow engine.");
-      
+      const candidate = response.candidates?.[0];
+      if (!candidate) throw new Error("No candidates in response");
+
+      let result = "";
+      if (candidate.content && candidate.content.parts) {
+        for (const part of candidate.content.parts) {
+          if (part.text) {
+            result += part.text;
+          }
+        }
+      }
+      if (!result) throw new Error("Empty response from SENTINEL FLOW AUDITOR engine.");
+
       const cleanJson = result.replace(/```json\n?|\n?```/g, '').trim();
       return JSON.parse(cleanJson) as AuditReport;
     } catch (error: any) {
       const errorMsg = error?.message || "";
-      const isTransient = 
-        errorMsg.includes('503') || 
-        errorMsg.includes('500') || 
-        errorMsg.includes('overloaded') || 
+      const isTransient =
+        errorMsg.includes('503') ||
+        errorMsg.includes('500') ||
+        errorMsg.includes('overloaded') ||
         errorMsg.includes('high demand') ||
         errorMsg.includes('Service Unavailable');
 
@@ -145,7 +155,7 @@ export class GeminiService {
         await this.delay(backoff);
         return this.auditLogs(logs, onStatus, attempt + 1);
       }
-      
+
       throw new Error(`Sentinel Audit Failed: ${errorMsg}`);
     }
   }

@@ -8,15 +8,15 @@ interface ConstitutionProps {
 
 export const Constitution: React.FC<ConstitutionProps> = ({ isLockdown }) => {
   return (
-    <div className="sf-card" style={{ 
+    <div className="sf-card" style={{
       borderColor: isLockdown ? '#f43f5e' : '#f59e0b',
       background: isLockdown ? 'rgba(159, 18, 57, 0.05)' : 'rgba(245, 158, 11, 0.05)',
       padding: '1.5rem'
     }}>
-      <h3 className="mono" style={{ 
-        margin: '0 0 1.5rem 0', 
-        fontSize: '11px', 
-        textTransform: 'uppercase', 
+      <h3 className="mono" style={{
+        margin: '0 0 1.5rem 0',
+        fontSize: '11px',
+        textTransform: 'uppercase',
         letterSpacing: '0.2em',
         color: isLockdown ? '#f43f5e' : '#f59e0b',
         display: 'flex',
@@ -32,11 +32,11 @@ export const Constitution: React.FC<ConstitutionProps> = ({ isLockdown }) => {
           <h4 style={{ margin: 0, fontWeight: 900, textTransform: 'uppercase', fontSize: '1rem' }}>{AXIOM_01.title}</h4>
           <span className="mono" style={{ fontSize: '9px', fontWeight: 900, padding: '2px 6px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px' }}>{AXIOM_01.id}</span>
         </div>
-        <p style={{ fontSize: '12px', opacity: 0.8, fontStyle: 'italic', marginBottom: '1rem' }}>{AXIOM_01.description}</p>
-        
+        <p style={{ fontSize: '13px', opacity: 0.8, fontStyle: 'italic', marginBottom: '1rem' }}>{AXIOM_01.description}</p>
+
         <div style={{ marginBottom: '1rem' }}>
-          <span className="mono" style={{ fontSize: '9px', textTransform: 'uppercase', fontWeight: 900, display: 'block', marginBottom: '0.5rem', opacity: 0.5 }}>Forensic Protocol</span>
-          <ul className="mono" style={{ margin: 0, padding: 0, listStyle: 'none', fontSize: '10px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span className="mono" style={{ fontSize: '13px', textTransform: 'uppercase', fontWeight: 900, display: 'block', marginBottom: '0.5rem', opacity: 0.5 }}>Forensic Protocol</span>
+          <ul className="mono" style={{ margin: 0, padding: 0, listStyle: 'none', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {AXIOM_01.constraints.map((c, i) => (
               <li key={i} style={{ display: 'flex', gap: '0.5rem' }}>
                 <span style={{ color: isLockdown ? '#f43f5e' : '#f59e0b' }}>▶</span>
@@ -46,10 +46,10 @@ export const Constitution: React.FC<ConstitutionProps> = ({ isLockdown }) => {
           </ul>
         </div>
 
-        <div style={{ 
-          fontSize: '10px', 
-          fontWeight: 900, 
-          textTransform: 'uppercase', 
+        <div style={{
+          fontSize: '10px',
+          fontWeight: 900,
+          textTransform: 'uppercase',
           color: isLockdown ? '#fff' : '#f43f5e',
           background: isLockdown ? '#f43f5e' : 'transparent',
           padding: isLockdown ? '8px' : '0',

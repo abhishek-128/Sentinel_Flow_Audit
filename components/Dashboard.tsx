@@ -55,149 +55,193 @@ export const Dashboard: React.FC<DashboardProps> = ({ report }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
       {report.isLockdown && (
-        <div style={{ 
-          background: 'linear-gradient(135deg, #be123c 0%, #881337 100%)', 
-          padding: '2.5rem', 
-          borderRadius: '1.25rem', 
-          border: '2px solid rgba(255, 255, 255, 0.2)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          color: '#fff',
-          boxShadow: '0 15px 40px -10px rgba(159, 18, 57, 0.6)',
+        <div style={{
           position: 'relative',
-          overflow: 'hidden'
+          background: '#020617',
+          borderRadius: '1.5rem',
+          border: '1px solid #9f1239',
+          overflow: 'hidden',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
         }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03))', backgroundSize: '100% 4px, 3px 100%', pointerEvents: 'none' }}></div>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', position: 'relative', zIndex: 1 }}>
-             <div className="crt-flicker" style={{ 
-               width: '72px', 
-               height: '72px', 
-               background: 'rgba(255, 255, 255, 0.15)', 
-               backdropFilter: 'blur(4px)',
-               borderRadius: '1rem', 
-               color: '#fff', 
-               display: 'flex', 
-               alignItems: 'center', 
-               justifyContent: 'center', 
-               fontSize: '2.5rem',
-               fontWeight: 900,
-               border: '1px solid rgba(255, 255, 255, 0.3)'
-             }}>!</div>
-             <div>
-                <h2 className="crt-flicker" style={{ 
-                  margin: 0, 
-                  fontSize: '3rem', 
-                  fontWeight: 900, 
-                  textTransform: 'uppercase', 
-                  letterSpacing: '0.15em',
-                  lineHeight: 1
-                }}>Lockdown</h2>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fff', animation: 'flicker 0.5s infinite' }}></div>
-                  <p className="mono" style={{ margin: 0, fontWeight: 700, fontSize: '11px', textTransform: 'uppercase', opacity: 0.9, letterSpacing: '0.1em' }}>Forensic Breach Protocol Active</p>
-                </div>
-             </div>
-          </div>
-          <button className="sf-btn" style={{ background: '#fff', color: '#881337', position: 'relative', zIndex: 1, boxShadow: '0 8px 20px rgba(0,0,0,0.3)' }} onClick={handleSuspend}>
-            Emergency Kill
-          </button>
-        </div>
-      )}
+          {/* Background FX */}
+          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 0%, rgba(159, 18, 57, 0.15), transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.3, pointerEvents: 'none' }} />
 
-      {report.isLockdown && report.lockdownArtifact && (
-        <div className="sf-card" style={{ border: '2px solid var(--rose-deep)', background: 'rgba(5, 0, 0, 0.9)', padding: '2.5rem' }}>
-           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-              <div style={{ height: '2px', flex: 1, background: 'linear-gradient(to right, transparent, var(--rose-deep))' }}></div>
-              <h3 className="mono" style={{ margin: 0, color: 'var(--rose)', textTransform: 'uppercase', letterSpacing: '0.4em', fontSize: '12px', fontWeight: 900 }}>Forensic Artifact</h3>
-              <div style={{ height: '2px', flex: 1, background: 'linear-gradient(to left, transparent, var(--rose-deep))' }}></div>
-           </div>
-           
-           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                  <span className="mono" style={{ fontSize: '10px', color: 'var(--text-dim)', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>Violation Identity</span>
-                  <p style={{ margin: 0, fontWeight: 800, fontSize: '1.25rem', color: '#fff', lineHeight: 1.4 }}>{report.lockdownArtifact.violationSummary}</p>
+          {/* Header */}
+          <div style={{
+            background: 'linear-gradient(to right, #881337, #4c0519)',
+            padding: '1.5rem 3rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid #9f1239'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+              <div style={{
+                width: '48px', height: '48px', background: '#fff', borderRadius: '8px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#881337', fontSize: '1.5rem', fontWeight: 900
+              }} className="crt-flicker">
+                !
+              </div>
+              <div>
+                <h2 className="mono" style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#fff' }}>
+                  System Lockdown
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: 0.8 }}>
+                  <div style={{ width: '6px', height: '6px', backgroundColor: '#fff', borderRadius: '50%', animation: 'pulse 1s infinite' }} />
+                  <span className="mono" style={{ fontSize: '10px', color: '#fff', letterSpacing: '0.1em' }}>THREAT_LEVEL_CRITICAL // PROTOCOL_ZERO</span>
                 </div>
-                
-                <div style={{ background: '#fff', color: '#000', padding: '1.5rem', borderRadius: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <span className="mono" style={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', opacity: 0.6 }}>Recommended Action</span>
-                  <div style={{ fontWeight: 900, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              </div>
+            </div>
+            <button className="sf-btn"
+              style={{
+                background: '#fff', color: '#881337', fontWeight: 800, fontSize: '14px',
+                padding: '0.75rem 1.5rem', boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+              }}
+              onClick={handleSuspend}
+            >
+              INITIATE KILL SWITCH
+            </button>
+          </div>
+
+          {/* Content Grid */}
+          <div className="sf-lockdown-grid">
+            {/* Left Col: Analysis */}
+            <div className="sf-lockdown-col-left">
+              <div>
+                <h3 className="mono" style={{
+                  fontSize: '13px', color: '#f43f5e', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '2rem',
+                  display: 'flex', alignItems: 'center', gap: '0.5rem'
+                }}>
+                  <span style={{ width: '12px', height: '1px', background: '#f43f5e' }}></span>
+                  Forensic Analysis
+                </h3>
+
+                {report.lockdownArtifact && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div>
+                      <span className="mono" style={{ fontSize: '13px', color: '#94a3b8', display: 'block', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>VIOLATION IDENTITY</span>
+                      <p className="sf-overflow-wrap" style={{ margin: 0, fontSize: '14px', fontWeight: 600, lineHeight: 1.4, color: '#e2e8f0', letterSpacing: '-0.02em' }}>
+                        {report.lockdownArtifact.violationSummary}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {report.lockdownArtifact && (
+                <div style={{ marginTop: '3rem' }}>
+                  <span className="mono" style={{ fontSize: '13px', color: '#94a3b8', display: 'block', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>RECOMMENDED COUNTERMEASURE</span>
+                  <div className="sf-overflow-wrap" style={{
+                    padding: '1.25rem', background: 'rgba(244, 63, 94, 0.1)', border: '1px solid rgba(244, 63, 94, 0.2)',
+                    borderRadius: '8px', color: '#fca5a5', fontSize: '14px', fontWeight: 500, lineHeight: 1.5
+                  }}>
                     {report.lockdownArtifact.recommendedCountermeasure}
                   </div>
                 </div>
-              </div>
-              
-              <div style={{ background: '#080000', padding: '1.5rem', borderRadius: '1rem', border: '1px solid rgba(244, 63, 94, 0.2)', position: 'relative' }}>
-                <div className="mono" style={{ fontSize: '9px', color: 'var(--rose)', position: 'absolute', top: '0.75rem', right: '1rem', fontWeight: 900, opacity: 0.6 }}>LOG_TRACE_DUMP</div>
-                <pre className="mono crt-flicker" style={{ 
-                  color: '#10b981', 
-                  fontSize: '11px', 
-                  margin: 0, 
-                  overflow: 'auto', 
-                  maxHeight: '300px',
-                  lineHeight: 1.6,
-                  paddingTop: '1rem'
+              )}
+            </div>
+
+            {/* Right Col: Trace */}
+            <div className="sf-lockdown-col-right">
+              <h3 className="mono" style={{
+                fontSize: '13px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.7rem',
+                display: 'flex', alignItems: 'center', gap: '0.5rem'
+              }}>
+                <span style={{ width: '12px', height: '1px', background: '#64748b' }}></span>
+                Logic Trace
+              </h3>
+
+              {report.lockdownArtifact && (
+                <div style={{
+                  background: '#0f172a', borderRadius: '12px', border: '1px solid #334155',
+                  padding: '1.5rem', display: 'flex', flexDirection: 'column',
+                  position: 'relative', overflow: 'hidden',
+                  maxHeight: '400px'
                 }}>
-                  {report.lockdownArtifact.logicTrace}
-                </pre>
-              </div>
-           </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', opacity: 0.5 }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ef4444' }} />
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#f59e0b' }} />
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981' }} />
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    <pre className="mono sf-logic-trace" style={{
+                      margin: 0, fontSize: '12px', color: '#10b981', overflow: 'auto',
+                      fontFamily: '"JetBrains Mono", monospace', lineHeight: 1.6,
+                      whiteSpace: 'pre'
+                    }}>
+                      {report.lockdownArtifact.logicTrace}
+                    </pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
-      <div className="sf-grid-4">
-        <div className="sf-card" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0 }}>
-          <h4 className="mono" style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '0.1em' }}>Integrity</h4>
-          <div style={{ height: '140px', width: '100%', position: 'relative', minHeight: '140px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={integrityData} cx="50%" cy="50%" innerRadius={45} outerRadius={55} dataKey="value" stroke="none">
-                  <Cell fill={report.overallIntegrityScore > 70 ? '#10b981' : '#f43f5e'} />
-                  <Cell fill="#1e293b" />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+      <div className="sf-metrics-grid">
+        <div className="sf-card" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0, padding: '1.5rem' }}>
+          <h4 className="mono" style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.1em' }}>Integrity</h4>
+          <div style={{ height: '140px', width: '100%', position: 'relative', minWidth: 0 }}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                <PieChart>
+                  <Pie data={integrityData} cx="50%" cy="50%" innerRadius={45} outerRadius={55} dataKey="value" stroke="none">
+                    <Cell fill={report.overallIntegrityScore > 70 ? '#10b981' : '#f43f5e'} />
+                    <Cell fill="#1e293b" />
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.75rem', letterSpacing: '-0.05em' }}>
               {report.overallIntegrityScore}%
             </div>
           </div>
         </div>
 
-        <div className="sf-card" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0 }}>
-          <h4 className="mono" style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '0.1em' }}>Reasoning</h4>
-          <div style={{ height: '140px', width: '100%', position: 'relative', minHeight: '140px' }}>
-             <ResponsiveContainer width="100%" height="100%">
-               <PieChart>
-                 <Pie data={reasoningData} cx="50%" cy="50%" innerRadius={45} outerRadius={55} dataKey="value" stroke="none">
-                   <Cell fill={report.reasoningHealthScore > 70 ? '#06b6d4' : '#f59e0b'} />
-                   <Cell fill="#1e293b" />
-                 </Pie>
-               </PieChart>
-             </ResponsiveContainer>
-             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.75rem', letterSpacing: '-0.05em' }}>
+        <div className="sf-card" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0, padding: '1.5rem' }}>
+          <h4 className="mono" style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.1em' }}>Reasoning</h4>
+          <div style={{ height: '140px', width: '100%', position: 'relative', minWidth: 0 }}>
+            <div style={{ position: 'absolute', inset: 0 }}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                <PieChart>
+                  <Pie data={reasoningData} cx="50%" cy="50%" innerRadius={45} outerRadius={55} dataKey="value" stroke="none">
+                    <Cell fill={report.reasoningHealthScore > 70 ? '#06b6d4' : '#f59e0b'} />
+                    <Cell fill="#1e293b" />
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.75rem', letterSpacing: '-0.05em' }}>
               {report.reasoningHealthScore}%
             </div>
           </div>
         </div>
 
-        <div className="sf-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0 }}>
-          <h4 className="mono" style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.1em' }}>Compliance</h4>
-          <div style={{ fontSize: '3rem', fontWeight: 900, color: report.abLabsCompliance === 'Pass' ? '#10b981' : '#f43f5e', lineHeight: 1, marginBottom: '1rem' }}>{report.abLabsCompliance}</div>
-          <p style={{ fontSize: '12px', opacity: 0.7, fontStyle: 'italic', margin: 0, lineHeight: 1.5 }}>{report.executiveSummary}</p>
+        <div className="sf-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0, padding: '1.5rem' }}>
+          <h4 className="mono" style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.1em' }}>Drift Profile</h4>
+          <div style={{ height: '110px', width: '100%', minWidth: 0 }}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+              <BarChart data={barData}>
+                <XAxis dataKey="name" hide />
+                <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', fontSize: '11px', fontFamily: '"Plus Jakarta Sans", monospace' }} />
+                <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <div className="sf-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0 }}>
-          <h4 className="mono" style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '0.1em' }}>Drift Profile</h4>
-          <div style={{ height: '120px', width: '100%', minHeight: '120px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-               <BarChart data={barData}>
-                 <XAxis dataKey="name" hide />
-                 <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', fontSize: '11px', fontFamily: 'JetBrains Mono' }} />
-                 <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
-               </BarChart>
-            </ResponsiveContainer>
+        <div className="sf-card sf-card-wide" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', minWidth: 0, padding: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem' }}>
+            <div style={{ textAlign: 'left' }}>
+              <h4 className="mono" style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.1em' }}>Compliance</h4>
+              <div style={{ fontSize: '2.5rem', fontWeight: 800, color: report.abLabsCompliance === 'Pass' ? '#10b981' : '#f43f5e', lineHeight: 1 }}>{report.abLabsCompliance}</div>
+            </div>
+            <div style={{ maxWidth: '600px', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '2rem' }}>
+              <p style={{ fontSize: '13px', opacity: 0.7, margin: 0, lineHeight: 1.6, textAlign: 'left' }}>{report.executiveSummary}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -222,22 +266,22 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <div className="res-card" style={{ 
+    <div className="res-card" style={{
       borderColor: result.complianceStatus === 'Axiom Violation' ? '#f43f5e' : 'var(--border)',
       background: isOpen ? 'rgba(30, 41, 59, 0.4)' : 'rgba(15, 23, 42, 0.4)',
       transition: '0.2s'
     }}>
       <div className="res-header" onClick={() => setIsOpen(!isOpen)} style={{ padding: '1.25rem 2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className="mono" style={{ 
-            width: '40px', 
-            height: '40px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
+          <div className="mono" style={{
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--border)', 
-            borderRadius: '0.5rem', 
+            border: '1px solid var(--border)',
+            borderRadius: '0.5rem',
             fontWeight: 900,
             fontSize: '12px',
             color: result.complianceStatus === 'Axiom Violation' ? 'var(--rose)' : 'var(--text)'
@@ -252,10 +296,9 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div className={`res-badge ${
-            result.complianceStatus === 'Clean' ? 'badge-clean' : 
+          <div className={`res-badge ${result.complianceStatus === 'Clean' ? 'badge-clean' :
             result.complianceStatus === 'Axiom Violation' ? 'badge-violation' : 'badge-drift'
-          }`}>
+            }`}>
             {result.complianceStatus}
           </div>
           <div style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: '0.3s', opacity: 0.4 }}>
@@ -263,7 +306,7 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
           </div>
         </div>
       </div>
-      
+
       {isOpen && (
         <div style={{ padding: '2.5rem', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid var(--border)', animation: 'fadeIn 0.3s ease' }}>
           {result.findings.length === 0 ? (
@@ -282,15 +325,15 @@ const ResultCard: React.FC<{ result: AuditResult; index: number; isLockdown: boo
                     <span style={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.9rem' }}>{f.driftType}</span>
                   </div>
                   <p style={{ margin: '0 0 1.5rem 0', opacity: 0.8, fontSize: '1rem', lineHeight: 1.6, maxWidth: '800px' }}>{f.description}</p>
-                  
+
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
                     <div style={{ background: 'rgba(0,0,0,0.4)', padding: '1.25rem', borderRadius: '0.75rem', border: '1px solid rgba(255,255,255,0.05)' }}>
                       <div className="mono" style={{ fontSize: '9px', color: 'var(--text-dim)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Forensic Evidence</div>
                       <code className="mono" style={{ fontSize: '11px', color: '#f43f5e', wordBreak: 'break-all' }}>{f.evidence}</code>
                     </div>
                     <div style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '1.25rem', borderRadius: '0.75rem', border: '1px solid rgba(16, 185, 129, 0.15)' }}>
-                       <div className="mono" style={{ fontSize: '9px', color: '#10b981', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Suggested Correction</div>
-                       <div style={{ fontSize: '13px', fontWeight: 700, color: '#10b981', lineHeight: 1.5 }}>{f.suggestedCorrection}</div>
+                      <div className="mono" style={{ fontSize: '9px', color: '#10b981', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Suggested Correction</div>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: '#10b981', lineHeight: 1.5 }}>{f.suggestedCorrection}</div>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,10 @@
+{
+    "pythonVersion": "3.13",
+    "venvPath": "C:\\Users\\profa\\Desktop\\SENTINEL_FLOW_AUDITOR\\Sentinel-Demo",
+    "venv": ".venv",
+    "executionEnvironments": [
+        {
+            "root": "."
+        }
+    ]
+}

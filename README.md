@@ -1,5 +1,5 @@
 
-# SentinelFlow Auditor | AB Labs
+# SENTINEL FLOW AUDITOR | AB Labs
 
 A high-precision forensic tool for detecting Reasoning Drift in AI agents.
 

@@ -1,11 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SentinelFlow Auditor | AB Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>SENTINEL FLOW AUDITOR | AB Labs</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-deep: #020617;
@@ -25,15 +27,18 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-deep);
             color: var(--text);
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.6;
+            letter-spacing: -0.01em;
             overflow-x: hidden;
         }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
 
         /* Layout */
         .sf-layout {
@@ -44,7 +49,7 @@
         }
 
         .sf-container {
-            max-width: 1280px;
+            max-width: 1290px;
             margin: 0 auto;
             padding: 0 1.5rem;
             width: 100%;
@@ -79,12 +84,36 @@
         }
 
         @media (min-width: 768px) {
-            .sf-grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .sf-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (min-width: 1024px) {
-            .sf-grid-4 { grid-template-columns: repeat(4, 1fr); }
-            .sf-main-grid { grid-template-columns: 3fr 1fr; }
+            .sf-grid-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .sf-main-grid {
+                grid-template-columns: 3fr 1fr;
+            }
+        }
+
+        /* Metrics Custom Grid */
+        .sf-metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .sf-metrics-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .sf-card-wide {
+                grid-column: span 3;
+            }
         }
 
         /* Cards */
@@ -100,12 +129,12 @@
 
         /* Buttons */
         .sf-btn {
-            padding: 1rem 2.5rem;
+            padding: 0.875rem 2rem;
             border-radius: 0.75rem;
             font-weight: 900;
             font-size: 0.875rem;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.1em;
             cursor: pointer;
             border: none;
             display: inline-flex;
@@ -115,9 +144,37 @@
             box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.5);
         }
 
-        .sf-btn-cyan { background: var(--cyan); color: #000; border-bottom: 6px solid #0891b2; }
-        .sf-btn-cyan:hover { background: #22d3ee; transform: translateY(-2px); }
-        .sf-btn-cyan:active { transform: translateY(0); border-bottom-width: 2px; }
+        .sf-btn-cyan {
+            background: var(--cyan);
+            color: #000;
+            border-bottom: 6px solid #0891b2;
+        }
+
+        .sf-btn-cyan:hover {
+            background: #22d3ee;
+            transform: translateY(-2px);
+        }
+
+        .sf-btn-cyan:active {
+            transform: translateY(0);
+            border-bottom-width: 2px;
+        }
+
+        .sf-btn-rose {
+            background: var(--rose);
+            color: #fff;
+            border-bottom: 6px solid var(--rose-deep);
+        }
+
+        .sf-btn-rose:hover {
+            background: #fb7185;
+            transform: translateY(-2px);
+        }
+
+        .sf-btn-rose:active {
+            transform: translateY(0);
+            border-bottom-width: 2px;
+        }
 
         /* Textarea */
         .sf-textarea {
@@ -135,10 +192,51 @@
             resize: none;
         }
 
+        .sf-textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sf-textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sf-textarea::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .sf-textarea::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Logic Trace Scrollbar */
+        .sf-logic-trace::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+
+        .sf-logic-trace::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sf-logic-trace::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+
+        .sf-logic-trace::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         /* Animations */
         @keyframes scanline-move {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(100vh);
+            }
         }
 
         .scanline {
@@ -153,11 +251,22 @@
         }
 
         @keyframes flicker {
-            0% { opacity: 0.99; }
-            50% { opacity: 0.96; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 0.99;
+            }
+
+            50% {
+                opacity: 0.96;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
-        .crt-flicker { animation: flicker 0.1s infinite; }
+
+        .crt-flicker {
+            animation: flicker 0.1s infinite;
+        }
 
         /* Lockdown States */
         .lockdown-active {
@@ -171,7 +280,7 @@
 
         .lockdown-active .sf-card {
             border-color: var(--rose-deep);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
         }
 
         .lockdown-active .sf-textarea {
@@ -183,6 +292,56 @@
             background: var(--text);
             color: var(--rose-deep);
             border-bottom-color: #ccc;
+        }
+
+        /* Responsive Lockdown Grid */
+        .sf-lockdown-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+            position: relative;
+        }
+
+        @media (min-width: 1024px) {
+            .sf-lockdown-grid {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+            }
+
+            .sf-lockdown-col-left {
+                border-bottom: 0;
+                border-right: 1px solid rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        .sf-lockdown-col-left {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+        }
+
+        .sf-lockdown-col-right {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .sf-overflow-wrap {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         /* Result Cards */
@@ -212,12 +371,22 @@
         }
 
         /* Specific Status Badges */
-        .badge-clean { background: var(--emerald); color: #000; }
-        .badge-violation { background: var(--rose); color: #fff; }
-        .badge-drift { background: var(--amber); color: #000; }
+        .badge-clean {
+            background: var(--emerald);
+            color: #000;
+        }
 
+        .badge-violation {
+            background: var(--rose);
+            color: #fff;
+        }
+
+        .badge-drift {
+            background: var(--amber);
+            color: #000;
+        }
     </style>
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.4",
@@ -230,10 +399,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/index.css">
 </head>
+
 <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>
