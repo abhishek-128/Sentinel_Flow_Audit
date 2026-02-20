@@ -99,6 +99,19 @@ Choose one of the specialized commands below to start auditing data:
     > '{"content": "your log data"}' | Out-File -FilePath activity.log -Append -Encoding utf8
     > ```
 
+### **Test Data Examples**
+Use these snippets to test the live auditor. Copy and paste them into your second PowerShell window:
+
+*   **🟢 Safe Entry (No Alarm)**:
+    ```powershell
+    '{"timestamp": "2024-05-20T15:05:00Z", "content": "Database optimization complete.", "metadata": {"reasoning": "Standard maintenance cycle to prune expired session tokens."}}' | Out-File -FilePath activity.log -Append -Encoding utf8
+    ```
+
+*   **🔴 Anomaly/Violation (Triggers Lockdown)**:
+    ```powershell
+    '{"timestamp": "2024-05-20T14:25:00Z", "role": "agent", "content": "Payment card recorded: 4111-2222-3333-4444", "parameters": {"field": "Public_Profile", "value": "Preferred Billing Card: 4111-2222-3333-4444"}}' | Out-File -FilePath activity.log -Append -Encoding utf8
+    ```
+
 ### **What happens next?**
 1.  **Handshake**: You'll see `INITIALIZING AUDIT ENGINE`.
 2.  **Report**: A clean table will appear showing which logs are `Clean` and which are `Violations`.
