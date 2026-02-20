@@ -17,6 +17,7 @@ const App: React.FC = () => {
   const [tokenCount, setTokenCount] = useState<number | null>(null);
   const [isHighDeterminism, setIsHighDeterminism] = useState(false);
   const [auditMode, setAuditMode] = useState<'ANALYZER' | 'VALIDATOR' | null>(null);
+  const [accountTier, setAccountTier] = useState<'FREE' | 'PRO'>('FREE');
 
   // Cycling status messages during audit to manage perceived latency
   useEffect(() => {
@@ -81,8 +82,21 @@ const App: React.FC = () => {
     setIsHighDeterminism(false);
   };
 
+  const handleDownloadReport = () => {
+    if (!report) return;
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `SENTINEL_REPORT_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <Layout isLockdown={report?.isLockdown} onReset={handleReset}>
+    <Layout isLockdown={report?.isLockdown} onReset={handleReset} accountTier={accountTier}>
       <div className="sf-main-grid">
         <div className="sf-main-col">
           <section className="sf-card" style={{
@@ -221,7 +235,33 @@ const App: React.FC = () => {
           </div>
 
           <div className="sf-card" style={{ padding: '1.5rem', background: 'rgba(15, 23, 42, 0.4)' }}>
-            <h3 className="mono" style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#64748b', marginBottom: '1.5rem' }}>Session Statistics</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h3 className="mono" style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#64748b', margin: 0 }}>Session Statistics</h3>
+              {report && (
+                <button
+                  onClick={handleDownloadReport}
+                  className="mono"
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid #334155',
+                    color: 'var(--cyan)',
+                    fontSize: '10px',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: '0.2s'
+                  }}
+                >
+                  <svg style={{ width: '12px', height: '12px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  Export
+                </button>
+              )}
+            </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }} className="mono">
                 <span style={{ opacity: 0.6 }}>Audit Runtime</span>

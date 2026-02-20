@@ -58,6 +58,16 @@ export const Constitution: React.FC<ConstitutionProps> = ({ isLockdown }) => {
           Violator Action: {AXIOM_01.action}
         </div>
       </div>
+
+      <div style={{ marginTop: '2rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', opacity: 0.5, pointerEvents: 'none' }}>
+        <h4 className="mono" style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b', marginBottom: '1rem', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>Custom Axioms</span>
+          <span style={{ fontSize: '9px', background: '#334155', color: '#fff', padding: '2px 6px', borderRadius: '4px' }}>PRO ONLY</span>
+        </h4>
+        <div style={{ padding: '1rem', border: '1px dashed #334155', borderRadius: '8px', textAlign: 'center' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>Upgrade to Sentinel Pro to enforce custom constitutional boundaries.</p>
+        </div>
+      </div>
     </div>
   );
 };

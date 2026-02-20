@@ -5,9 +5,10 @@ interface LayoutProps {
   children: React.ReactNode;
   isLockdown?: boolean;
   onReset?: () => void;
+  accountTier?: string;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, isLockdown, onReset }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, isLockdown, onReset, accountTier = 'FREE' }) => {
   return (
     <div className={`sf-layout ${isLockdown ? 'lockdown-active' : ''}`}>
       {isLockdown && <div className="scanline" />}
@@ -53,6 +54,18 @@ export const Layout: React.FC<LayoutProps> = ({ children, isLockdown, onReset })
             letterSpacing: '0.05em'
           }}>
             {isLockdown ? 'SYSTEM_LOCKDOWN: ACTIVE' : 'SECURE_LINK: ESTABLISHED'}
+          </div>
+          <div className="mono" style={{
+            marginLeft: '1rem',
+            padding: '4px 10px',
+            borderRadius: '4px',
+            background: accountTier === 'PRO' ? '#f59e0b' : '#334155',
+            color: accountTier === 'PRO' ? '#000' : '#fff',
+            fontSize: '10px',
+            fontWeight: 800,
+            letterSpacing: '0.05em'
+          }}>
+            TIER: {accountTier}
           </div>
         </div>
       </header>
