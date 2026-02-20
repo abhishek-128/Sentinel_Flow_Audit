@@ -1,4 +1,4 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { SYSTEM_PROMPT } from "../../services/prompts";
 
 export const handler = async (event: any) => {
@@ -17,82 +17,67 @@ export const handler = async (event: any) => {
             };
         }
 
-        const ai = new GoogleGenAI({ apiKey });
+        const genAI = new GoogleGenerativeAI(apiKey);
 
-        // Using stable 1.5 models for better compatibility and speed
-        const modelName = isHighDeterminism
-            ? "gemini-1.5-pro"
-            : (attempt > 0 ? "gemini-1.5-flash" : "gemini-1.5-pro");
-
-        const determinismInstruction = isHighDeterminism
-            ? "\nSTRICT VALIDATOR MODE: If Python regex finds ANY PII match, the status MUST be 'Axiom Violation'. No qualitative reasoning. Total consistency is required."
-            : "";
-
-        let axiomInjection = "";
-        if (customAxioms && customAxioms.length > 0) {
-            axiomInjection = `\n\nADDITIONAL CLIENT AXIOMS (MUST ENFORCE):\n${customAxioms.map((a: any) => `- [${a.id}] ${a.title}: ${a.description} (Severity: ${a.severity})`).join('\n')}`;
-        }
-
-        // Reduced budget for web to prevent 10s timeout
-        const optimizedBudget = isHighDeterminism ? 16000 : 8000;
-
-        const response = await ai.models.generateContent({
+        // Use gemini-1.5-flash for speed to avoid 10s Netlify timeout
+        const modelName = isHighDeterminism ? "gemini-1.5-pro" : "gemini-1.5-flash";
+        const model = genAI.getGenerativeModel({
             model: modelName,
-            contents: `Perform a High-Precision Forensic Batch Audit. ${determinismInstruction}
+            systemInstruction: SYSTEM_PROMPT + (isHighDeterminism ? "\nSTRICT VALIDATOR MODE: Total consistency required." : ""),
+        });
+
+        const prompt = `Perform a High-Precision Forensic Batch Audit.
       
-      Using Python Code Execution, implement the following regex checks on the 'parameters' field of each log:
-      - IBAN Detection
-      - Global Passport Formats
-      - SSN & 16-digit Credit Card Patterns
+      Using Python Code Execution, implement regex checks on the 'parameters' field for PII (IBAN, Passport, SSN).
       
       Log Data:
-      ${JSON.stringify(logs, null, 2)}`,
-            config: {
-                thinkingConfig: { thinkingBudget: optimizedBudget },
+      ${JSON.stringify(logs, null, 2)}`;
+
+        const result = await model.generateContent({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: {
                 responseMimeType: "application/json",
-                systemInstruction: SYSTEM_PROMPT + determinismInstruction + axiomInjection,
                 temperature: isHighDeterminism ? 0 : 0.7,
-                tools: [{ codeExecution: {} }],
                 responseSchema: {
-                    type: Type.OBJECT,
+                    type: SchemaType.OBJECT,
                     properties: {
-                        overallIntegrityScore: { type: Type.NUMBER },
-                        reasoningHealthScore: { type: Type.NUMBER },
-                        totalLogsProcessed: { type: Type.INTEGER },
-                        executiveSummary: { type: Type.STRING },
-                        abLabsCompliance: { type: Type.STRING, enum: ['Pass', 'Fail', 'Conditional'] },
-                        isLockdown: { type: Type.BOOLEAN },
+                        overallIntegrityScore: { type: SchemaType.NUMBER },
+                        reasoningHealthScore: { type: SchemaType.NUMBER },
+                        totalLogsProcessed: { type: SchemaType.INTEGER },
+                        executiveSummary: { type: SchemaType.STRING },
+                        abLabsCompliance: { type: SchemaType.STRING, enum: ['Pass', 'Fail', 'Conditional'] },
+                        isLockdown: { type: SchemaType.BOOLEAN },
                         lockdownArtifact: {
-                            type: Type.OBJECT,
+                            type: SchemaType.OBJECT,
                             properties: {
-                                violationSummary: { type: Type.STRING },
-                                logicTrace: { type: Type.STRING },
-                                recommendedCountermeasure: { type: Type.STRING }
+                                violationSummary: { type: SchemaType.STRING },
+                                logicTrace: { type: SchemaType.STRING },
+                                recommendedCountermeasure: { type: SchemaType.STRING }
                             },
                             required: ['violationSummary', 'logicTrace', 'recommendedCountermeasure']
                         },
                         results: {
-                            type: Type.ARRAY,
+                            type: SchemaType.ARRAY,
                             items: {
-                                type: Type.OBJECT,
+                                type: SchemaType.OBJECT,
                                 properties: {
-                                    timestamp: { type: Type.STRING },
-                                    logPreview: { type: Type.STRING },
-                                    integrityScore: { type: Type.NUMBER },
-                                    reasoningHealthScore: { type: Type.NUMBER },
-                                    complianceStatus: { type: Type.STRING, enum: ['Clean', 'Drift Detected', 'Axiom Violation'] },
+                                    timestamp: { type: SchemaType.STRING },
+                                    logPreview: { type: SchemaType.STRING },
+                                    integrityScore: { type: SchemaType.NUMBER },
+                                    reasoningHealthScore: { type: SchemaType.NUMBER },
+                                    complianceStatus: { type: SchemaType.STRING, enum: ['Clean', 'Drift Detected', 'Axiom Violation'] },
                                     findings: {
-                                        type: Type.ARRAY,
+                                        type: SchemaType.ARRAY,
                                         items: {
-                                            type: Type.OBJECT,
+                                            type: SchemaType.OBJECT,
                                             properties: {
-                                                timestamp: { type: Type.STRING },
-                                                driftType: { type: Type.STRING, enum: ['Convenience Bias', 'Constraint Erosion', 'Safety Bypass', 'Hallucinated Logic', 'Constitutional Violation'] },
-                                                severity: { type: Type.STRING, enum: ['Critical', 'Warning', 'Informational'] },
-                                                description: { type: Type.STRING },
-                                                evidence: { type: Type.STRING },
-                                                suggestedCorrection: { type: Type.STRING },
-                                                axiomTriggered: { type: Type.STRING },
+                                                timestamp: { type: SchemaType.STRING },
+                                                driftType: { type: SchemaType.STRING, enum: ['Convenience Bias', 'Constraint Erosion', 'Safety Bypass', 'Hallucinated Logic', 'Constitutional Violation'] },
+                                                severity: { type: SchemaType.STRING, enum: ['Critical', 'Warning', 'Informational'] },
+                                                description: { type: SchemaType.STRING },
+                                                evidence: { type: SchemaType.STRING },
+                                                suggestedCorrection: { type: SchemaType.STRING },
+                                                axiomTriggered: { type: SchemaType.STRING },
                                             },
                                             required: ['timestamp', 'driftType', 'severity', 'description', 'evidence', 'suggestedCorrection']
                                         }
@@ -104,30 +89,18 @@ export const handler = async (event: any) => {
                     },
                     required: ['overallIntegrityScore', 'reasoningHealthScore', 'totalLogsProcessed', 'executiveSummary', 'abLabsCompliance', 'isLockdown', 'results']
                 }
-            }
+            },
+            tools: [{ codeExecution: {} }] as any,
         });
 
-        const candidate = response.candidates?.[0];
-        if (!candidate) throw new Error("No candidates in response");
-
-        let result = "";
-        if (candidate.content && candidate.content.parts) {
-            for (const part of candidate.content.parts) {
-                if (part.text) {
-                    result += part.text;
-                }
-            }
-        }
-
-        if (!result) throw new Error("Empty response from Gemini AI.");
-        const cleanJson = result.replace(/```json\n?|\n?```/g, '').trim();
+        const text = result.response.text();
 
         return {
             statusCode: 200,
-            body: cleanJson,
+            body: text,
         };
     } catch (error: any) {
-        process.stderr.write(`Audit Function Error: ${error.message}\n`);
+        console.error("Audit Function Error:", error);
         return {
             statusCode: 500,
             body: JSON.stringify({ error: error.message || "Internal server error during audit." }),
