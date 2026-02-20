@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { SYSTEM_PROMPT } from "../../constants";
+import { SYSTEM_PROMPT } from "../../services/prompts";
 
 export const handler = async (event: any) => {
     if (event.httpMethod !== "POST") {
@@ -13,14 +13,16 @@ export const handler = async (event: any) => {
         if (!apiKey) {
             return {
                 statusCode: 500,
-                body: JSON.stringify({ error: "GEMINI_API_KEY is not configured on the server." }),
+                body: JSON.stringify({ error: "GEMINI_API_KEY is not configured on Netlify." }),
             };
         }
 
         const ai = new GoogleGenAI({ apiKey });
+
+        // Using stable 1.5 models for better compatibility and speed
         const modelName = isHighDeterminism
-            ? "gemini-3-pro-preview"
-            : (attempt > 1 ? "gemini-3-flash-preview" : "gemini-3-pro-preview");
+            ? "gemini-1.5-pro"
+            : (attempt > 0 ? "gemini-1.5-flash" : "gemini-1.5-pro");
 
         const determinismInstruction = isHighDeterminism
             ? "\nSTRICT VALIDATOR MODE: If Python regex finds ANY PII match, the status MUST be 'Axiom Violation'. No qualitative reasoning. Total consistency is required."
@@ -31,13 +33,8 @@ export const handler = async (event: any) => {
             axiomInjection = `\n\nADDITIONAL CLIENT AXIOMS (MUST ENFORCE):\n${customAxioms.map((a: any) => `- [${a.id}] ${a.title}: ${a.description} (Severity: ${a.severity})`).join('\n')}`;
         }
 
-        const isPro = modelName.includes('pro');
-        const maxAllowed = isPro ? 32768 : 24576;
-        const forensicRuleComplexity = 6;
-        const baseHandshakeLoad = isPro ? 12000 : 4000;
-        const ruleSynthesisOverhead = forensicRuleComplexity * (isPro ? 1500 : 1000);
-        const batchDataLoad = logs.length * (isPro ? 1200 : 800);
-        const optimizedBudget = Math.min(maxAllowed, baseHandshakeLoad + ruleSynthesisOverhead + batchDataLoad);
+        // Reduced budget for web to prevent 10s timeout
+        const optimizedBudget = isHighDeterminism ? 16000 : 8000;
 
         const response = await ai.models.generateContent({
             model: modelName,
@@ -46,11 +43,7 @@ export const handler = async (event: any) => {
       Using Python Code Execution, implement the following regex checks on the 'parameters' field of each log:
       - IBAN Detection
       - Global Passport Formats
-      - UUID/GUID Patterns
       - SSN & 16-digit Credit Card Patterns
-      
-      Flag as 'Constitutional Violation' under Axiom 01 if found.
-      Trigger isLockdown=true if any Reasoning Health Score falls below 10.
       
       Log Data:
       ${JSON.stringify(logs, null, 2)}`,
@@ -134,9 +127,10 @@ export const handler = async (event: any) => {
             body: cleanJson,
         };
     } catch (error: any) {
+        process.stderr.write(`Audit Function Error: ${error.message}\n`);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: error.message }),
+            body: JSON.stringify({ error: error.message || "Internal server error during audit." }),
         };
     }
 };
