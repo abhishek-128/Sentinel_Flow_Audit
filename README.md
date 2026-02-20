@@ -91,13 +91,13 @@ Choose one of the specialized commands below to start auditing data:
 
 *   **To Audit the Mock Dataset (Easiest)**:
     ```bash
-    python sentinel_agent.py --batch mock_logs.json --deterministic
+    python Sentinel-Demo/sentinel_agent.py --batch Sentinel-Demo/mock_logs.json --deterministic
     ```
     *(This runs a strict check on the provided test data to show you how a violation is detected.)*
 
 *   **To Monitor a Live File**:
     ```bash
-    python sentinel_agent.py --watch activity.log
+    python Sentinel-Demo/sentinel_agent.py --watch activity.log
     ```
     *(The auditor will stay open and "watch" the file, alerting you the moment a subversion occurs.)*
 
