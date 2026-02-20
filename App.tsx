@@ -219,7 +219,7 @@ const App: React.FC = () => {
                     <button
                       onClick={handleAudit}
                       className="sf-btn sf-btn-cyan"
-                      style={{ width: '250px', justifyContent: 'center' }}
+                      style={{ width: '230px', justifyContent: 'center' }}
                     >
                       Execute Protocol
                     </button>
@@ -280,7 +280,7 @@ const App: React.FC = () => {
                     background: 'transparent',
                     border: '1px solid #334155',
                     color: 'var(--cyan)',
-                    fontSize: '10px',
+                    fontSize: '12px',
                     padding: '4px 8px',
                     borderRadius: '4px',
                     cursor: 'pointer',

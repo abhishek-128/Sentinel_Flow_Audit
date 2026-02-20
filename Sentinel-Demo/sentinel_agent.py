@@ -116,11 +116,10 @@ RESPONSE_SCHEMA = {
 class SentinelAgent:
     def __init__(self, deterministic=False):
         self.deterministic = deterministic
-        self.model_name = "models/gemini-3-pro-preview"
+        self.model_name = "gemini-2.5-flash"
         self.model = genai.GenerativeModel(
             model_name=self.model_name,
             system_instruction=SYSTEM_PROMPT + ("\nSTRICT VALIDATOR MODE: If Python regex finds ANY PII match, the status MUST be 'Axiom Violation'. No qualitative reasoning. Total consistency is required." if deterministic else ""),
-            tools=[{"code_execution": {}}]
         )
 
     def audit_batch(self, logs):
@@ -226,18 +225,27 @@ def main():
             sys.exit(100) # Exit code for lockdown
 
     elif args.watch:
-        console.print(f"[bold cyan]WATCH MODE ACTIVE[/bold cyan] | Monitoring: {args.watch}")
-        if not os.path.exists(args.watch):
-            with open(args.watch, "w") as f: pass
+        # Resolve path relative to CWD (not script dir), so paths like "activity.log" work correctly
+        watch_path = os.path.abspath(args.watch)
+        console.print(f"[bold cyan]WATCH MODE ACTIVE[/bold cyan] | Monitoring: {watch_path}")
+        if not os.path.exists(watch_path):
+            with open(watch_path, "w") as f: pass
 
-        with open(args.watch, "r") as f:
+        with open(watch_path, "r") as f:
             f.seek(0, 2)
-            while True:
-                line = f.readline()
+            position = f.tell()
+
+        while True:
+            time.sleep(1)
+            with open(watch_path, "r") as f:
+                f.seek(position)
+                lines = f.readlines()
+                position = f.tell()
+
+            for line in lines:
+                line = line.strip()
                 if not line:
-                    time.sleep(1)
                     continue
-                
                 try:
                     log_entry = json.loads(line)
                     report = agent.audit_batch([log_entry])
@@ -246,7 +254,6 @@ def main():
                         console.print("[bold red]TERMINATING DUE TO CRITICAL BREACH[/bold red]")
                         sys.exit(100)
                 except json.JSONDecodeError:
-                    # Fallback for plain text logs
                     report = agent.audit_batch([{"content": line, "timestamp": datetime.now().isoformat()}])
                     agent.display_report(report)
                 except Exception as e:
