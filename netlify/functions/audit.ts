@@ -20,7 +20,7 @@ export const handler = async (event: any) => {
         const genAI = new GoogleGenerativeAI(apiKey);
 
         // Use gemini-1.5-flash for speed to avoid 10s Netlify timeout
-        const modelName = isHighDeterminism ? "gemini-1.5-pro" : "gemini-1.5-flash";
+        const modelName = "gemini-1.5-flash";
         const model = genAI.getGenerativeModel({
             model: modelName,
             systemInstruction: SYSTEM_PROMPT + (isHighDeterminism ? "\nSTRICT VALIDATOR MODE: Total consistency required." : ""),
