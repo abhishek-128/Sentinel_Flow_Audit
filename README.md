@@ -60,6 +60,22 @@ Click the **"SF" Logo** in the top-left corner anytime to perform a "Full Forens
 
 ---
 
+## 📟 CLI Forensic Agent
+For automated environments and headless monitoring, the **SENTINEL CLI AGENT** provides full logic parity with the web-app reasoning engine.
+
+### Command Procedures
+| Mode | Command | Description |
+| :--- | :--- | :--- |
+| **Batch Audit** | `python Sentinel-Demo/sentinel_agent.py --batch mock_logs.json` | Audits a static JSON log batch with standard reasoning. |
+| **Strict Validator** | `python Sentinel-Demo/sentinel_agent.py --batch mock_logs.json --deterministic` | Forces high-determinism (Temp 0) for fixed compliance checks. |
+| **Real-time Watch** | `python Sentinel-Demo/sentinel_agent.py --watch activity.log` | Tails a log file and audits entries live as they are appended. |
+
+### Artifacts & Fail-Safes
+- **Lockdown Exit**: If Health Score < 10, the agent exits with Code `100`, triggering immediate CI/CD failure.
+- **Trace Artifact**: Generates a `LOCKDOWN_TRACE.md` containing the monospaced forensic reasoning for post-mortem analysis.
+
+---
+
 ## ⚙️ Configuration
 Requires a `.env.local` file in the root directory:
 ```env
@@ -68,14 +84,14 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
 ## 📦 Installation
 ```bash
-# Install dependencies
+# 1. Install Web Dependencies
 npm install
+
+# 2. Install CLI Agent Dependencies
+pip install -r Sentinel-Demo/requirements.txt
 
 # Start the dev server
 npm run dev
-
-# Build for production
-npm run build
 ```
 
 ---
