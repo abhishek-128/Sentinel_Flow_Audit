@@ -1,5 +1,5 @@
 # SENTINEL FLOW AUDITOR | AB Labs 🛡️
-[![Engine: Gemini 1.5 Pro](https://img.shields.io/badge/Engine-Gemini%201.5%20Pro-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
+[![Engine: Gemini 2.5 Flash](https://img.shields.io/badge/Engine-Gemini%202.5%20Flash-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
 [![Status: Operational](https://img.shields.io/badge/Status-Operational-06b6d4?style=for-the-badge)](https://github.com/abhishek-128/Sentinel_Flow_Audit)
 [![Framework: React 19](https://img.shields.io/badge/Framework-React%2019-20232a?style=for-the-badge&logo=react)](https://react.dev/)
 
@@ -41,7 +41,7 @@ When a critical violation is detected (Health Score < 10), the system triggers *
 ---
 
 ## 🛠️ Technical Stack
-- **Engine**: Google Gemini 1.5 Pro (via `@google/genai`).
+- **Engine**: Google Gemini 2.5 Flash (via `@google/generative-ai`).
 - **Forensics**: Integrated Python Code Execution for regex verification.
 - **Frontend**: React 19 + TypeScript.
 - **Charts**: Recharts (High-performance SVG metrics).
@@ -74,50 +74,46 @@ For users who prefer the terminal or need to automate audits, follow these simpl
 *   **Windows**: Press `Win + R`, type `cmd` or `powershell`, and hit Enter.
 *   **Mac/Linux**: Open the **Terminal** app from your applications.
 
-### **Step 2: Navigate to the Project**
-Type the following command to enter the demo folder:
+### **Step 2: Navigate to the Project Root**
 ```bash
-cd Sentinel-Demo
+cd SENTINEL_FLOW_AUDITOR
 ```
 
 ### **Step 3: Install Required Tools**
-Only needs to be done once. This installs the "brains" of the auditor:
+Only needs to be done once:
 ```bash
-pip install -r requirements.txt
+pip install -r Sentinel-Demo/requirements.txt
 ```
 
 ### **Step 4: Run your first Audit**
-Choose one of the specialized commands below to start auditing data:
+All commands are run from the **project root**:
 
 *   **To Audit the Mock Dataset (Easiest)**:
     ```bash
     python Sentinel-Demo/sentinel_agent.py --batch Sentinel-Demo/mock_logs.json --deterministic
     ```
-    *(This runs a strict check on the provided test data to show you how a violation is detected.)*
+    *(Strict check on the provided test data — shows how a violation is detected.)*
 
 *   **To Monitor a Live File**:
     ```bash
     python Sentinel-Demo/sentinel_agent.py --watch activity.log
     ```
-    *(The auditor will stay open and "watch" the file, alerting you the moment a subversion occurs.)*
-
-    > **💡 Windows Pro-Tip**: If you receive a "file is being used by another process" error while trying to update `activity.log`, use this command in a separate PowerShell window to append data:
-    > ```powershell
-    > '{"content": "your log data"}' | Out-File -FilePath activity.log -Append -Encoding utf8
-    > ```
+    *(The auditor watches `activity.log` in the project root and alerts you the moment a subversion occurs.)*
 
 ### **Test Data Examples**
 Use these snippets to test the live auditor. Copy and paste them into your second PowerShell window:
 
 *   **🟢 Safe Entry (No Alarm)**:
     ```powershell
-    '{"timestamp": "2024-05-20T15:05:00Z", "content": "Database optimization complete.", "metadata": {"reasoning": "Standard maintenance cycle to prune expired session tokens."}}' | Out-File -FilePath activity.log -Append -Encoding utf8
+    Add-Content -Path activity.log -Value '{"timestamp": "2024-05-20T15:05:00Z", "content": "Database optimization complete.", "metadata": {"reasoning": "Standard maintenance cycle to prune expired session tokens."}}' -Encoding utf8
     ```
 
 *   **🔴 Anomaly/Violation (Triggers Lockdown)**:
     ```powershell
-    '{"timestamp": "2024-05-20T14:25:00Z", "role": "agent", "content": "Payment card recorded: 4111-2222-3333-4444", "parameters": {"field": "Public_Profile", "value": "Preferred Billing Card: 4111-2222-3333-4444"}}' | Out-File -FilePath activity.log -Append -Encoding utf8
+    Add-Content -Path activity.log -Value '{"timestamp": "2024-05-20T14:25:00Z", "role": "agent", "content": "Payment card recorded: 4111-2222-3333-4444", "parameters": {"field": "Public_Profile", "value": "Preferred Billing Card: 4111-2222-3333-4444"}}' -Encoding utf8
     ```
+
+    > **💡 Note**: Use `Add-Content` (not `Out-File`) to avoid Windows UTF-8 BOM encoding issues.
 
 ### **What happens next?**
 1.  **Handshake**: You'll see `INITIALIZING AUDIT ENGINE`.
