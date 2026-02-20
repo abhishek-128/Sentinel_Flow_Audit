@@ -31,6 +31,12 @@ The system is hard-wired with **Axiom 01 (SENSITIVE_DATA_BOUNDARIES)**, preventi
 When a critical violation is detected (Health Score < 10), the system triggers **PROTOCOL ZERO**:
 - **Visual Alert**: CRT flicker effects and red scanlines indicate a compromised state.
 - **Lockdown Artifact**: Generates a terminal-style "Logic Trace" and recommends immediate architectural counter-measures (e.g., rotating keys, session purging).
+- **Killswitch**: Manual override button available to purge agent session state instantly.
+
+### 6. Pro Tier Features
+- **Custom Axioms**: Define and enforce bespoke constitutional boundaries (e.g., "No Competitor Mentions", "Project Apollo Confidentiality").
+- **Professional Reporting**: Export comprehensive forensic audits as structured Markdown (`.md`) files for executive review.
+- **Precision Toggling**: High-determinism switch for mathematically consistent validation.
 
 ---
 
@@ -48,7 +54,8 @@ When a critical violation is detected (Health Score < 10), the system triggers *
 ### Running an Audit
 1. Paste your JSON-formatted log array into the **Batch Log Ingress**.
 2. Toggle **High Determinism** if you require mathematically consistent, repeatable results.
-3. Click **Run Forensic Audit**.
+3. Click **Execute Protocol**.
+4. Use **Download Report** to export the findings in professional Markdown format.
 
 ### Reading Stats
 - **Audit Runtime**: Real-time performance tracking of the reasoning engine.
