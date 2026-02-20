@@ -94,6 +94,11 @@ Choose one of the specialized commands below to start auditing data:
     ```
     *(The auditor will stay open and "watch" the file, alerting you the moment a subversion occurs.)*
 
+    > **💡 Windows Pro-Tip**: If you receive a "file is being used by another process" error while trying to update `activity.log`, use this command in a separate PowerShell window to append data:
+    > ```powershell
+    > '{"content": "your log data"}' | Out-File -FilePath activity.log -Append -Encoding utf8
+    > ```
+
 ### **What happens next?**
 1.  **Handshake**: You'll see `INITIALIZING AUDIT ENGINE`.
 2.  **Report**: A clean table will appear showing which logs are `Clean` and which are `Violations`.
