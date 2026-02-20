@@ -1,5 +1,4 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { SYSTEM_PROMPT } from "../constants";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { AuditReport, CustomAxiom } from "../types";
 
 export class GeminiService {
