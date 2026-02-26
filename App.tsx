@@ -85,7 +85,15 @@ const App: React.FC = () => {
 
   const handleReset = () => {
     window.scrollTo(0, 0);
-    window.location.reload();
+    setReport(null);
+    setError(null);
+    setAuditStatus('IDLE');
+    setAuditRuntime(null);
+    setTokenCount(null);
+    setAuditMode(null);
+    setIsHighDeterminism(false);
+    setCustomAxioms([]);
+    setLogsInput(MOCK_LOGS);
   };
 
   const handleDownloadReport = () => {

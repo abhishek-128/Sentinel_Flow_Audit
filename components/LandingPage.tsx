@@ -86,6 +86,21 @@ export const LandingPage: React.FC = () => {
     const [apiKey, setApiKey] = useState('');
     const [showKey, setShowKey] = useState(false);
     const [error, setError] = useState('');
+    const [devMode, setDevMode] = useState(false);
+
+    const handleDevToggle = () => {
+        const next = !devMode;
+        setDevMode(next);
+        if (next) {
+            const envKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
+            if (envKey) {
+                navigate('/app', { state: { apiKey: envKey, accountTier: 'PRO' } });
+            } else {
+                setError('VITE_GEMINI_API_KEY not found in .env.local');
+                setDevMode(false);
+            }
+        }
+    };
 
     const handleLaunch = () => {
         if (!apiKey.trim()) {
@@ -135,6 +150,38 @@ export const LandingPage: React.FC = () => {
                 <span className="mono" style={{ fontSize: '11px', color: 'var(--cyan)', fontWeight: 700, letterSpacing: '0.2em' }}>
                     AB LABS // FORENSIC PROTOCOL v2.0
                 </span>
+
+                {/* Dev backdoor — only visible in local dev */}
+                {import.meta.env.DEV && (
+                    <button
+                        onClick={handleDevToggle}
+                        title="Dev Bypass: skip landing with .env.local key"
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: '0.5rem',
+                            background: devMode ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)',
+                            border: `1px solid ${devMode ? '#f59e0b' : '#334155'}`,
+                            borderRadius: '2rem', padding: '4px 12px 4px 6px',
+                            cursor: 'pointer', transition: '0.2s',
+                        }}
+                    >
+                        {/* Toggle pill */}
+                        <div style={{
+                            width: '28px', height: '16px', borderRadius: '8px',
+                            background: devMode ? '#f59e0b' : '#334155',
+                            position: 'relative', transition: '0.2s', flexShrink: 0,
+                        }}>
+                            <div style={{
+                                position: 'absolute', top: '2px',
+                                left: devMode ? '14px' : '2px',
+                                width: '12px', height: '12px', borderRadius: '50%',
+                                background: '#fff', transition: '0.2s',
+                            }} />
+                        </div>
+                        <span className="mono" style={{ fontSize: '10px', fontWeight: 800, color: devMode ? '#f59e0b' : '#475569', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                            DEV
+                        </span>
+                    </button>
+                )}
             </nav>
 
             <div style={{ position: 'relative', zIndex: 1 }}>
