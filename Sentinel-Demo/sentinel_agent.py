@@ -188,7 +188,8 @@ class SentinelAgent:
         console.print(table)
 
         if report.get('isLockdown'):
-            console.print("\n" + Panel(
+            console.print("\n")
+            console.print(Panel(
                 f"[bold red]CRITICAL BREACH DETECTED[/bold red]\n\n"
                 f"[white]{report['lockdownArtifact']['violationSummary']}[/white]\n\n"
                 f"[bold yellow]RECOMMENDED COUNTERMEASURE:[/bold yellow]\n{report['lockdownArtifact']['recommendedCountermeasure']}",
