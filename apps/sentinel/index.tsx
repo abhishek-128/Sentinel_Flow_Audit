@@ -1,9 +1,9 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import App from './App';
 import { LandingPage } from './components/LandingPage';
+import { SynapticDashboard } from './components/synaptic/SynapticDashboard';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -17,6 +17,7 @@ root.render(
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/app" element={<App />} />
+        <Route path="/distiller" element={<SynapticDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

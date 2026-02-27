@@ -89,8 +89,24 @@ export const Constitution: React.FC<ConstitutionProps> = ({
       <div style={{ marginTop: '2rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', opacity: accountTier === 'FREE' ? 0.5 : 1, pointerEvents: accountTier === 'FREE' ? 'none' : 'auto' }}>
         <h4 className="mono" style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b', marginBottom: '1rem', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontSize: '12px' }}>Custom Axioms</span>
-          <span style={{ fontSize: '11px', background: accountTier === 'PRO' ? '#f59e0b' : '#334155', color: accountTier === 'PRO' ? '#000' : '#fff', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>
-            {accountTier === 'PRO' ? 'ACTIVE' : 'PRO ONLY'}
+          <span style={{
+            fontSize: '11px',
+            background: accountTier === 'PRO' ? '#f59e0b' : 'rgba(245, 158, 11, 0.2)',
+            color: accountTier === 'PRO' ? '#000' : '#f59e0b',
+            padding: '2px 8px',
+            borderRadius: '4px',
+            fontWeight: 800,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            border: accountTier === 'PRO' ? 'none' : '1px solid #f59e0b'
+          }}>
+            {accountTier === 'FREE' && (
+              <svg style={{ width: '10px', height: '10px' }} fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+              </svg>
+            )}
+            {accountTier === 'PRO' ? 'ACTIVE' : 'PRO_ONLY'}
           </span>
         </h4>
 

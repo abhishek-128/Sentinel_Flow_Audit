@@ -26,3 +26,17 @@ dist-ssr
 *.sln
 *.sw?
 .venv
+.agent
+.gemini
+
+# Generated Artifacts
+LOCKDOWN_TRACE.md
+*.md.bak
+
+# Test Data & Large Files
+apps/synaptic/test_data/*.pdf
+test_document.pdf
+
+# OS junk
+.DS_Store
+Thumbs.db

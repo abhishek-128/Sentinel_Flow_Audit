@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Logic Map",
+    "description": "Output schema for the Synaptic Compiler after PDF Distillation. Contains essential logical propositions for Sentinel Auditor.",
+    "type": "object",
+    "properties": {
+        "sourceFile": {
+            "type": "string",
+            "description": "Original file name of the digested PDF."
+        },
+        "distillationEventId": {
+            "type": "string",
+            "description": "Unique identifier for the Distillation Event."
+        },
+        "nodes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique node identifier e.g. node_1."
+                    },
+                    "proposition": {
+                        "type": "string",
+                        "description": "The minimized logically standalone text statement."
+                    }
+                },
+                "required": [
+                    "id",
+                    "proposition"
+                ]
+            }
+        }
+    },
+    "required": [
+        "sourceFile",
+        "distillationEventId",
+        "nodes"
+    ]
+}

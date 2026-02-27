@@ -139,7 +139,11 @@ const App: React.FC = () => {
                   Batch Log Ingress
                 </h2>
                 <div
-                  onClick={() => setIsHighDeterminism(!isHighDeterminism)}
+                  onClick={() => {
+                    if (accountTier === 'PRO') {
+                      setIsHighDeterminism(!isHighDeterminism);
+                    }
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -149,19 +153,30 @@ const App: React.FC = () => {
                     border: '1px solid',
                     borderColor: isHighDeterminism ? 'var(--cyan)' : 'rgba(255, 255, 255, 0.1)',
                     borderRadius: '2rem',
-                    cursor: 'pointer',
+                    cursor: accountTier === 'PRO' ? 'pointer' : 'not-allowed',
                     transition: '0.3s',
                     minWidth: '175px',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    opacity: accountTier === 'PRO' ? 1 : 0.5
                   }}
+                  title={accountTier === 'FREE' ? 'Sentinel PRO feature' : ''}
                 >
                   <div style={{
                     width: '12px',
                     height: '12px',
                     borderRadius: '50%',
                     background: isHighDeterminism ? 'var(--cyan)' : '#64748b',
-                    boxShadow: isHighDeterminism ? '0 0 10px var(--cyan)' : 'none'
-                  }} />
+                    boxShadow: isHighDeterminism ? '0 0 10px var(--cyan)' : 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {accountTier === 'FREE' && (
+                      <svg style={{ width: '8px', height: '8px', color: '#000' }} fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
                   <span className="mono" style={{ fontSize: '11px', fontWeight: 800, color: isHighDeterminism ? 'var(--cyan)' : '#64748b' }}>
                     {isHighDeterminism ? 'HIGH_DETERMINISM: ON' : 'HIGH_DETERMINISM: OFF'}
                   </span>
@@ -291,25 +306,34 @@ const App: React.FC = () => {
               {report && (
                 <button
                   onClick={handleDownloadReport}
+                  disabled={accountTier === 'FREE'}
                   className="mono"
                   style={{
                     background: 'transparent',
                     border: '1px solid #334155',
-                    color: 'var(--cyan)',
+                    color: accountTier === 'PRO' ? 'var(--cyan)' : '#64748b',
                     fontSize: '12px',
                     padding: '4px 8px',
                     borderRadius: '4px',
-                    cursor: 'pointer',
+                    cursor: accountTier === 'PRO' ? 'pointer' : 'not-allowed',
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    transition: '0.2s'
+                    transition: '0.2s',
+                    opacity: accountTier === 'PRO' ? 1 : 0.6
                   }}
+                  title={accountTier === 'FREE' ? 'Export is a Sentinel PRO feature' : ''}
                 >
-                  <svg style={{ width: '12px', height: '12px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                  Export
+                  {accountTier === 'FREE' ? (
+                    <svg style={{ width: '12px', height: '12px' }} fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg style={{ width: '12px', height: '12px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  )}
+                  {accountTier === 'FREE' ? 'PRO_ONLY' : 'Export'}
                 </button>
               )}
             </div>

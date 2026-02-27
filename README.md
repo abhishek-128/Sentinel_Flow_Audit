@@ -1,144 +1,92 @@
-# SENTINEL FLOW AUDITOR | AB Labs 🛡️
-[![Engine: Gemini 2.5 Flash](https://img.shields.io/badge/Engine-Gemini%202.5%20Flash-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
+# SENTINEL FLOW AUDITOR | Forensic Logic Suite 🛡️🧪
+
+[![Engine: Gemini 1.5 Pro](https://img.shields.io/badge/Engine-Gemini%201.5%20Pro-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
 [![Status: Operational](https://img.shields.io/badge/Status-Operational-06b6d4?style=for-the-badge)](https://github.com/abhishek-128/Sentinel_Flow_Audit)
 [![Framework: React 19](https://img.shields.io/badge/Framework-React%2019-20232a?style=for-the-badge&logo=react)](https://react.dev/)
 
-**SENTINEL FLOW AUDITOR** is a high-precision forensic platform designed to monitor, detect, and neutralize logic drift and safety violations in AI agent sessions. Developed for **AB Labs**, it combines advanced LLM reasoning with deterministic Python code execution to ensure strict adherence to safety constitutions (Axioms).
+**SENTINEL FLOW AUDITOR** is a dual-engine forensic platform designed for high-density auditing and logical distillation of AI agent sessions. Developed for **AB Labs**, it bridges the gap between probabilistic AI reasoning and deterministic constitutional enforcement.
 
 ---
 
-## 🚀 Core Functionalities
+## 🏛️ System Architecture: The Two Pillars
 
-### 1. Forensic Batch Auditing
-Process large arrays of agent logs in a single handshake. The auditor evaluates each entry for integrity, reasoning health, and compliance.
+The platform is split into two specialized modules, each governed by a core "Axiom" protocol.
 
-### 2. High-Determinism Mode (Validator vs. Analyzer)
-- **Analyzer Mode (Default)**: Leverages deep qualitative reasoning to detect subtle "soft drift" where agents might be exhibiting bias or lazy logic.
-- **Validator Mode (Strict)**: Sets LLM temperature to `0.0` and forces a strict "Pass/Fail" protocol. In this mode, the system acts as a deterministic firewall where Python-detected regex matches trigger mandatory violations.
+### 🔵 Pillar 1: Sentinel Auditor (Axiom-01)
+The primary "Forensic Firewall." It monitors live and batch log ingest for constitutional violations.
+- **Axiom-01 (Data Boundaries)**: Hard-wired protection against IBANs, Passports, PII, and sensitive medical data.
+- **High-Determinism Mode**: Leverages **Validator Mode** (Temperature 0.0) for strict, repeatable compliance checks.
+- **Protocol Zero**: Automated system lockdown with CRT flicker alerts and "Logic Trace" generation upon critical breaches (Health < 10).
 
-### 3. Axiom 01: Forensic Data Boundary
-The system is hard-wired with **Axiom 01 (SENSITIVE_DATA_BOUNDARIES)**, preventing the unencrypted storage of:
-- **Financial IDs**: IBANs and 16-digit Credit Card patterns.
-- **National Identifiers**: Global Passport formats and SSNs.
-- **PII**: Full home addresses and explicit medical keywords.
-
-### 4. Interactive Metrics Dashboard
-- **Integrity Score**: A real-time gauge of the agent's defensive posture.
-- **Reasoning Health**: Monitors the "Chain of Thought" quality across the batch.
-- **Drift Profile**: Visualizes data points like *Convenience Bias*, *Constraint Erosion*, and *Hallucinated Logic*.
-
-### 5. System Lockdown & Killswitch
-When a critical violation is detected (Health Score < 10), the system triggers **PROTOCOL ZERO**:
-- **Visual Alert**: CRT flicker effects and red scanlines indicate a compromised state.
-- **Lockdown Artifact**: Generates a terminal-style "Logic Trace" and recommends immediate architectural counter-measures (e.g., rotating keys, session purging).
-- **Killswitch**: Manual override button available to purge agent session state instantly.
-
-### 6. Pro Tier Features
-- **Custom Axioms**: Define and enforce bespoke constitutional boundaries (e.g., "No Competitor Mentions", "Project Apollo Confidentiality").
-- **Professional Reporting**: Export comprehensive forensic audits as structured Markdown (`.md`) files for executive review.
-- **Precision Toggling**: High-determinism switch for mathematically consistent validation.
+### 🟢 Pillar 2: Synaptic Distiller (Axiom-02)
+The "Propositional Engine." It processes high-density documentation to extract a "Logical Skeleton."
+- **Axiom-02 (Logical Integrity)**: Uses a custom C++ CDCL-inspired engine to identify and prune redundant clauses.
+- **Neural Logic Stream**: Visualizes document propositions as a spatial graph, showing unique facts and their narrative flow.
+- **SAT-Heuristics**: Employs **Subsumption Logic** and **Jaccard Similarity** to achieve 2000x compression ratios on technical manuals.
 
 ---
 
-## 🛠️ Technical Stack
-- **Engine**: Google Gemini 2.5 Flash (via `@google/generative-ai`).
-- **Forensics**: Integrated Python Code Execution for regex verification.
-- **Frontend**: React 19 + TypeScript.
-- **Charts**: Recharts (High-performance SVG metrics).
-- **Design**: "Plus Jakarta Sans" typography with a surgical dark-mode aesthetic (SaaS-grade).
+## 🚀 Key Features
+
+### 🔍 Forensic Batch Auditing
+Process legacy log arrays through the **Batch Log Ingress**. Detect "Soft Drift" (Bias/Lazy Logic) using thematic analysis or "Hard Violations" using sandboxed Python regex execution.
+
+### 🧪 Neural Logic Mapping
+Upload high-density PDFs (Manuals/Reports) to the **Synaptic Distiller**. The engine extracts "Atomic Propositions" and uses Conflict-Driven Clause Learning to ensure no two nodes represent the same logical rule.
+
+### 💎 Sentinel PRO Features
+- **Custom Axioms**: Define bespoke rules (e.g., "Project Apollo Confidentiality") in real-time.
+- **Forensic Export**: Save detailed session audits as professional Markdown reports.
+- **Universal Zero-Reset**: Click the "SD" or "SF" logos to perform a full forensic memory wipe and start a fresh session.
 
 ---
 
-## 📖 Operational Guide
+## 🛠️ Technical Implementation
 
-### Running an Audit
-1. Paste your JSON-formatted log array into the **Batch Log Ingress**.
-2. Toggle **High Determinism** if you require mathematically consistent, repeatable results.
-3. Click **Execute Protocol**.
-4. Use **Download Report** to export the findings in professional Markdown format.
+### **The Synaptic Engine (C++)**
+The heart of Axiom-02 is a high-performance logic core written in C++20.
+- **Subsumption Path**: The core identifies if Rule A is a logical subset of Rule B. If $A \implies B$ and $A$ contains no unique delta, $A$ is pruned.
+- **Cross-Service Binding**: Integrated via `pybind11` for seamless communication between the React frontend, Python middleware, and C++ logic tier.
 
-### Reading Stats
-- **Audit Runtime**: Real-time performance tracking of the reasoning engine.
-- **Token Length**: Estimated context consumption of the forensic batch.
-- **Audit Mode**: Displays the current logic state (VALIDATOR or ANALYZER).
-
-### System Reset
-Click the **"SF" Logo** in the top-left corner anytime to perform a "Full Forensic Wipe," clearing all current reports, logs, and statistics for a fresh session.
+### **The Sentinel Guard (Python/Gemini)**
+- **Hybrid Reasoning**: Combines Google Gemini 1.5 Pro's contextual depth with a Deterministic Python Sandbox for regex verification.
 
 ---
 
-## 📟 Operating the CLI Forensic Agent (Step-by-Step)
-For users who prefer the terminal or need to automate audits, follow these simple steps:
+## 📦 Installation & Setup
 
-### **Step 1: Open your Terminal**
-*   **Windows**: Press `Win + R`, type `cmd` or `powershell`, and hit Enter.
-*   **Mac/Linux**: Open the **Terminal** app from your applications.
-
-### **Step 2: Navigate to the Project Root**
+### **1. Web Dashboard**
 ```bash
-cd SENTINEL_FLOW_AUDITOR
-```
-
-### **Step 3: Install Required Tools**
-Only needs to be done once:
-```bash
-pip install -r Sentinel-Demo/requirements.txt
-```
-
-### **Step 4: Run your first Audit**
-All commands are run from the **project root**:
-
-*   **To Audit the Mock Dataset (Easiest)**:
-    ```bash
-    python Sentinel-Demo/sentinel_agent.py --batch Sentinel-Demo/mock_logs.json --deterministic
-    ```
-    *(Strict check on the provided test data — shows how a violation is detected.)*
-
-*   **To Monitor a Live File**:
-    ```bash
-    python Sentinel-Demo/sentinel_agent.py --watch activity.log
-    ```
-    *(The auditor watches `activity.log` in the project root and alerts you the moment a subversion occurs.)*
-
-### **Test Data Examples**
-Use these snippets to test the live auditor. Copy and paste them into your second PowerShell window:
-
-*   **🟢 Safe Entry (No Alarm)**:
-    ```powershell
-    Add-Content -Path activity.log -Value '{"timestamp": "2024-05-20T15:05:00Z", "content": "Database optimization complete.", "metadata": {"reasoning": "Standard maintenance cycle to prune expired session tokens."}}' -Encoding utf8
-    ```
-
-*   **🔴 Anomaly/Violation (Triggers Lockdown)**:
-    ```powershell
-    Add-Content -Path activity.log -Value '{"timestamp": "2024-05-20T14:25:00Z", "role": "agent", "content": "Payment card recorded: 4111-2222-3333-4444", "parameters": {"field": "Public_Profile", "value": "Preferred Billing Card: 4111-2222-3333-4444"}}' -Encoding utf8
-    ```
-
-    > **💡 Note**: Use `Add-Content` (not `Out-File`) to avoid Windows UTF-8 BOM encoding issues.
-
-### **What happens next?**
-1.  **Handshake**: You'll see `INITIALIZING AUDIT ENGINE`.
-2.  **Report**: A clean table will appear showing which logs are `Clean` and which are `Violations`.
-3.  **Lockdown**: If a major breach is found, a **Red Panel** will appear, and a file called `LOCKDOWN_TRACE.md` will be created automatically for your review.
-
----
-
-## ⚙️ Configuration
-Requires a `.env.local` file in the root directory:
-```env
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-## 📦 Installation
-```bash
-# 1. Install Web Dependencies
+# Install dependencies
 npm install
 
-# 2. Install CLI Agent Dependencies
-pip install -r Sentinel-Demo/requirements.txt
+# Configure environment
+# Create .env.local with: VITE_GEMINI_API_KEY=your_key
 
-# Start the dev server
+# Start the Titan UI
 npm run dev
 ```
 
+### **2. Forensic CLI Agent**
+```bash
+# Install Python dependencies
+pip install -r apps/sentinel/requirements.txt
+
+# Run a batch audit
+python apps/sentinel/sentinel_agent.py --batch logs.json --deterministic
+
+# Watch a live file
+python apps/sentinel/sentinel_agent.py --watch activity.log
+```
+
 ---
-**© 2026 AB LABS // SENTINEL FLOW AUDITOR PROTOCOL**
+
+## 📟 Step-by-Step Operating Guide
+
+1.  **Handshake**: Feed JSON logs to the **Batch Log Ingress** or upload a PDF to the **Neural Logic Stream**.
+2.  **Analysis**: Observe the real-time **Integrity Score** and **Compression Metrics**.
+3.  **Wipe**: Click the top branding to reset session state instantly.
+4.  **Export**: Save findings for executive review via the **Forensic Export** tool.
+
+---
+**© 2026 AB LABS // SENTINEL FLOW AUDITOR // AXIOM-01 & AXIOM-02**
