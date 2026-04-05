@@ -1,0 +1,14 @@
+{
+    "include": [
+        "apps",
+        "tests"
+    ],
+    "extraPaths": [
+        "apps/synaptic"
+    ],
+    "pythonVersion": "3.13",
+    "pythonPlatform": "Windows",
+    "typeCheckingMode": "basic",
+    "reportMissingImports": "warning",
+    "reportMissingModuleSource": "none"
+}

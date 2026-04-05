@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  sentinel:
+    build:
+      context: ./apps/sentinel
+      # Assume an existing Dockerfile or use a generic one if missing
+      dockerfile: Dockerfile
+    container_name: sentinel
+    ports:
+      - "3000:3000" # React Dashboard
+      - "8000:8000" # Optional Python/Auditor backend port
+    volumes:
+      - synaptic_logs:/tmp/synaptic_logs
+    environment:
+      - SYNAPTIC_LOGS_DIR=/tmp/synaptic_logs
+
+  synaptic:
+    build:
+      context: ./apps/synaptic
+      dockerfile: Dockerfile
+    container_name: synaptic
+    ports:
+      - "8001:8001"
+    volumes:
+      - synaptic_logs:/tmp/synaptic_logs
+      - ./apps/synaptic/test_data:/app/test_data:ro
+    environment:
+      - LOG_DIR=/tmp/synaptic_logs
+
+volumes:
+  synaptic_logs:
